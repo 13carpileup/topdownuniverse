@@ -15,8 +15,9 @@ import { Universe } from './structs/Universe.js';
     // initialize the UNIVERSE!
 
     let uni = new Universe();
-    uni.addObject(app, app.screen.width / 2, app.screen.height / 2, 30, 0.5, 0);
-    uni.addObject(app, app.screen.width / 2, app.screen.height / 2, 30, 0.5, 2);
+    uni.addObject(app, 100, 100, 10, 0, 0, 10);
+    uni.addObject(app, 400, 650, 10, 2, 0, 10);
+    uni.addObject(app, app.screen.width - 100, app.screen.height - 100, 10, 0, 0, 10);
 
 
     // boilerplate
