@@ -1,0 +1,22 @@
+{
+  "name": "topdownuniverse",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/13carpileup/topdownuniverse.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/13carpileup/topdownuniverse/issues"
+  },
+  "homepage": "https://github.com/13carpileup/topdownuniverse#readme",
+  "description": "",
+  "dependencies": {
+    "pixi.js": "^8.6.6"
+  }
+}
