@@ -124,8 +124,6 @@ export class Button {
 
         this.label.x = 13;
         this.label.y = 13;
-
-  
         
         this.container.addChild(this.background);
         this.container.addChild(this.label);

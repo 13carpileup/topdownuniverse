@@ -43,7 +43,7 @@ export class Spacetime {
             let dist = [d1[0] - base[0], d1[1] - base[1]]; 
 
             let factor = (object.mass) * (1 / (dist[0] ** 2)) * 3;
-            factor = Math.min(factor, 1);
+            factor = Math.min(factor, 1.4);
 
             c[0] += dist[0] * factor;
             c[1] += dist[1] * factor;
