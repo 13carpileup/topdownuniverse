@@ -42,6 +42,11 @@ export class Spacetime {
             if (rev) d1.reverse();
             let dist = [d1[0] - base[0], d1[1] - base[1]]; 
 
+            if (dist[0]==0||dist[1]==0) return c;
+            
+            if (Math.abs(dist[0]) < 20) dist[0] = 20 * dist[0] / Math.abs(dist[0]);
+            if (Math.abs(dist[1]) < 20) dist[1] = 20 * dist[1] / Math.abs(dist[1]);
+
             let factor = (object.mass) * (1 / (dist[0] ** 2)) * 3;
             factor = Math.min(factor, 1.4);
 
