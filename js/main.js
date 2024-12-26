@@ -4,6 +4,7 @@ import { Universe } from './structs/Universe.js';
 let mouseDown = false;
 let local = [0, 0]
 let last = [0, 0]
+let dragTarget = null;
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('mousemove', (event) => {
-        if (!mouseDown) return;
+        if (!mouseDown || dragTarget!=null) return;
         
         local = [local[0] + event.clientX - last[0], local[1] + event.clientY - last[1]];
         last = [event.clientX, event.clientY];
@@ -37,15 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let uni = new Universe(app);
     
-    uni.addObject(app, 300, 300, 10, 2, 1, 100);
-    uni.addObject(app, 400, 850, 20, 0, 0, 30000);
-    uni.addObject(app, app.screen.width - 100, app.screen.height - 100, 10, 0, 0, 300);
+    // app
+    uni.addObject(app.screen.width / 2, app.screen.height / 2 - 400, 10, 1, 0, 10);
+    uni.addObject(app.screen.width / 2, app.screen.height / 2, 5, 0, 0, 3000);
 
     // boilerplate
     document.body.appendChild(app.canvas);
 
     app.ticker.add((time) =>
     {
-        uni.updateObjects(time.deltaTime, local);
+        dragTarget = uni.updateObjects(time.deltaTime, local);
     });
 })();

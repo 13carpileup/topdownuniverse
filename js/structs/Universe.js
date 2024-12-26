@@ -5,22 +5,65 @@ export class Universe {
     constructor(app) {
         this.Objects = [];
         this.Spacetime = new Spacetime(app);
+        this.app = app;
+
+        this.dragTarget = null;
+
+        this.app.stage.eventMode = 'static';
+        this.app.stage.hitArea = this.app.screen;
+
+        this.onDragMove = this.onDragMove.bind(this);
+        this.onDragEnd = this.onDragEnd.bind(this);
+
+        this.app.stage.on('pointerup', this.onDragEnd);
+        this.app.stage.on('pointerupoutside', this.onDragEnd);
     }
 
-    addObject(app, x, y, radius, velocity, angle, mass) {
+    onDragMove(event) {
+        if (this.dragTarget) {
+            this.dragTarget.ref.parent.toLocal(event.global, null, this.dragTarget.position);
+            let delta = [event.x - this.dragTarget.ref.x, event.y - this.dragTarget.ref.y];
+            
+            this.dragTarget.ref.x += delta[0];
+            this.dragTarget.ref.y += delta[1];
+
+            this.dragTarget.x += delta[0];
+            this.dragTarget.y += delta[1];
+            
+            console.log(event.x, event.y);
+        }
+    }
+
+    onDragStart(object) {
+        console.log("DRAG START!");
+        this.dragTarget = object;
+        this.app.stage.on('pointermove', this.onDragMove);
+    }
+
+    onDragEnd() {
+        if (this.dragTarget) {
+            this.app.stage.off('pointermove', this.onDragMove);
+            this.dragTarget = null;
+        }
+    }
+
+
+    addObject(x, y, radius, velocity, angle, mass) {
         const gr  = new PIXI.Graphics();
         gr.beginFill(0xffffff);
         gr.drawCircle(0, 0, radius);
         gr.endFill();
     
         //gr.anchor.set(0.5) // anchors centre the sprite to the middle of the object! (though i guess not for graphics)
-        gr.x = x;
-        gr.y = y;
+        gr.eventMode = 'static';
+        gr.cursor = 'pointer';
+
         gr.x = x - radius;
         gr.y = y - radius;
-        app.stage.addChild(gr);
+        this.app.stage.addChild(gr);
 
         let newObject = new Object(gr, radius, x, y, velocity, angle, mass);
+        newObject.ref.on('pointerdown', () => this.onDragStart(newObject)); // janky ass js code
         this.Objects.push(newObject);
     }
 
@@ -37,7 +80,7 @@ export class Universe {
                 if (object1 == object2) return;
 
                 if (object1.checkCollision(object2)) {
-                    console.log("COLLISION!")
+                    //console.log("COLLISION!")
                     if (object1.mass >= object2.mass) {
                         
                         
@@ -81,6 +124,8 @@ export class Universe {
             object.ref.y = object.y + local[1];
         });
 
-        this.Spacetime.update(this.Objects);
+        this.Spacetime.update(this.Objects, local);
+
+        return this.dragTarget;
     }
 }
