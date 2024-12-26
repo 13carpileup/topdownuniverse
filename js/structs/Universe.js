@@ -23,13 +23,22 @@ export class Universe {
         if (this.dragTarget) {
             this.dragTarget.ref.parent.toLocal(event.global, null, this.dragTarget.position);
             let delta = [event.x - this.dragTarget.ref.x, event.y - this.dragTarget.ref.y];
-            
+
             this.dragTarget.ref.x += delta[0];
             this.dragTarget.ref.y += delta[1];
 
             this.dragTarget.x += delta[0];
             this.dragTarget.y += delta[1];
+
+            let deltaTime = Date.now() - this.dragTarget.lastDragTime;
             
+            if (deltaTime >= 100) {
+                this.dragTarget.vx = (event.x - this.dragTarget.lastPos[0]) / deltaTime * 10; 
+                this.dragTarget.vy = (event.y - this.dragTarget.lastPos[1]) / deltaTime * 10; 
+
+                this.dragTarget.lastDragTime = Date.now();
+                this.dragTarget.lastPos = [event.x, event.y];
+            }
             console.log(event.x, event.y);
         }
     }
@@ -38,11 +47,13 @@ export class Universe {
         console.log("DRAG START!");
         this.dragTarget = object;
         this.app.stage.on('pointermove', this.onDragMove);
+        object.dragging = 1;
     }
 
     onDragEnd() {
         if (this.dragTarget) {
             this.app.stage.off('pointermove', this.onDragMove);
+            this.dragTarget.dragging = 0;
             this.dragTarget = null;
         }
     }
@@ -82,8 +93,6 @@ export class Universe {
                 if (object1.checkCollision(object2)) {
                     //console.log("COLLISION!")
                     if (object1.mass >= object2.mass) {
-                        
-                        
                         //conservation of momentum
                         object1.vx = (object1.vx * object1.mass + object2.vx * object2.mass) / (object1.mass + object2.mass);
                         object1.vy = (object1.vy * object1.mass + object2.vy * object2.mass) / (object1.mass + object2.mass);
@@ -114,6 +123,8 @@ export class Universe {
 
         // update movements, velocities
         this.Objects.forEach((object) => {
+            if (object.dragging) return;
+
             object.vx += (object.fx / object.mass) * gameTime;
             object.vy += (object.fy / object.mass) * gameTime;
 
