@@ -1,8 +1,10 @@
 import { Object } from "./Object.js";
+import { Spacetime } from "./Spacetime.js";
 
 export class Universe {
-    constructor() {
+    constructor(app) {
         this.Objects = [];
+        this.Spacetime = new Spacetime(app);
     }
 
     addObject(app, x, y, radius, velocity, angle, mass) {
@@ -18,11 +20,11 @@ export class Universe {
         gr.y = y - radius;
         app.stage.addChild(gr);
 
-        let newObject = new Object(gr, radius, velocity, angle, mass);
+        let newObject = new Object(gr, radius, x, y, velocity, angle, mass);
         this.Objects.push(newObject);
     }
 
-    updateObjects(gameTime) {
+    updateObjects(gameTime, local) {
         // reset forces
         this.Objects.forEach((object) => {
             object.fx = 0;
@@ -52,20 +54,16 @@ export class Universe {
                     return;
                 }
 
-                let Dx = (object2.ref.x - object1.ref.x);
-                let Dy = (object2.ref.y - object1.ref.y);
+                let Dx = (object2.x - object1.x);
+                let Dy = (object2.y - object1.y);
 
                 let distSquared = Dx ** 2 + Dy ** 2;
-                let force = (object1.mass * object2.mass) / distSquared * 5;
-
-                let theta = Math.atan2(Dy, Dx);
+                let force = (object1.mass * object2.mass) / distSquared * (1 / 5);
 
                 let dist = Math.sqrt(distSquared);
 
                 object1.fx += (Dx / dist) * force; 
                 object1.fy += (Dy / dist) * force; 
-
-                
 
                 // console.log("FORCES UPDATE", object1.fx, object1.fy);
             })
@@ -73,12 +71,16 @@ export class Universe {
 
         // update movements, velocities
         this.Objects.forEach((object) => {
-
             object.vx += (object.fx / object.mass) * gameTime;
             object.vy += (object.fy / object.mass) * gameTime;
 
-            object.ref.x += (object.vx) * (gameTime);
-            object.ref.y += (object.vy) * (gameTime);
-        })
+            object.x += (object.vx) * (gameTime);
+            object.y += (object.vy) * (gameTime);
+
+            object.ref.x = object.x + local[0];
+            object.ref.y = object.y + local[1];
+        });
+
+        this.Spacetime.update(this.Objects);
     }
 }

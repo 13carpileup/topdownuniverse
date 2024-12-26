@@ -1,7 +1,28 @@
 import { Object } from './structs/Object.js'
 import { Universe } from './structs/Universe.js';
 
+let mouseDown = false;
+let local = [0, 0]
+let last = [0, 0]
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('mousedown', (event) => {
+        mouseDown = true;
+        last = [event.clientX, event.clientY]
+    });
+
+    document.addEventListener('mouseup', (event) => {
+        mouseDown = false;
+    });
+
+    document.addEventListener('mousemove', (event) => {
+        if (!mouseDown) return;
+        
+        local = [local[0] + event.clientX - last[0], local[1] + event.clientY - last[1]];
+        last = [event.clientX, event.clientY];
+    }); 
+});
 
 
 // async IIFE
@@ -10,14 +31,14 @@ import { Universe } from './structs/Universe.js';
 {
     const app = new PIXI.Application();
 
-    await app.init({ background: '#6a6a6a', resizeTo: window });
+    await app.init({ background: '#000000', resizeTo: window });
 
     // initialize the UNIVERSE!
 
-    let uni = new Universe();
-    uni.addObject(app, 100, 100, 10, 0.05, 0, 40);
-
-    //uni.addObject(app, 400, 650, 10, 2, 0, 100);
+    let uni = new Universe(app);
+    
+    uni.addObject(app, 100, 100, 10, 0.8, 0, 40);
+    uni.addObject(app, 400, 850, 10, 0, 0, 30000);
     uni.addObject(app, app.screen.width - 100, app.screen.height - 100, 10, 0, 0, 30);
 
     // boilerplate
@@ -25,6 +46,6 @@ import { Universe } from './structs/Universe.js';
 
     app.ticker.add((time) =>
     {
-        uni.updateObjects(time.deltaTime);
+        uni.updateObjects(time.deltaTime, local);
     });
 })();

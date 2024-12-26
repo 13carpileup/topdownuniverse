@@ -1,7 +1,9 @@
 export class Object {
-    constructor(ref, radius, vx, vy, mass) {
+    constructor(ref, radius, x, y, vx, vy, mass) {
         this.ref = ref;
         this.radius = radius;
+        this.x = x;
+        this.y = y;
         this.vx = vx;
         this.vy = vy;
         this.mass = mass;
