@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let uni = new Universe(app);
     
     // app
-    uni.addObject(app.screen.width / 2, app.screen.height / 2 - 400, 10, 1, 0, 10);
-    uni.addObject(app.screen.width / 2, app.screen.height / 2, 5, 0, 0, 3000);
+    uni.addObject(app.screen.width / 2, app.screen.height / 2 - 400, 20, 1, 0, 10);
+    uni.addObject(app.screen.width / 2, app.screen.height / 2, 100, 0, 0, 3000);
 
     // boilerplate
     document.body.appendChild(app.canvas);

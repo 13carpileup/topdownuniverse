@@ -32,13 +32,12 @@ export class Universe {
 
             let deltaTime = Date.now() - this.dragTarget.lastDragTime;
             
-            if (deltaTime >= 100) {
-                this.dragTarget.vx = (event.x - this.dragTarget.lastPos[0]) / deltaTime * 10; 
-                this.dragTarget.vy = (event.y - this.dragTarget.lastPos[1]) / deltaTime * 10; 
+            this.dragTarget.vx = (event.x - this.dragTarget.lastPos[0]) / deltaTime * (3 / 2); 
+            this.dragTarget.vy = (event.y - this.dragTarget.lastPos[1]) / deltaTime * (3 / 2); 
 
-                this.dragTarget.lastDragTime = Date.now();
-                this.dragTarget.lastPos = [event.x, event.y];
-            }
+            this.dragTarget.lastDragTime = Date.now();
+            this.dragTarget.lastPos = [event.x, event.y];
+            
             console.log(event.x, event.y);
         }
     }
