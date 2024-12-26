@@ -2,7 +2,7 @@ export class Spacetime {
     constructor(app) {
         this.app = app;
         this.curves = [];
-        this.dif = 100;
+        this.dif = 50;
     }
 
     update(objects, local) {
@@ -35,12 +35,12 @@ export class Spacetime {
     }
 
     getControlPoint(base, objects) {
-        let c = base;
+        let c = [...base];
 
         objects.forEach((object) => {
             let dist = [object.ref.x - base[0], object.ref.y - base[1]]; 
 
-            let factor = (object.mass) * (1 / (dist[0] ** 2 + dist[1] ** 2)) * 3;
+            let factor = (object.mass) * (1 / (dist[0] ** 2 + dist[1] ** 2));
             factor = Math.min(factor, 1);
 
             c[0] += dist[0] * factor;
