@@ -8,4 +8,11 @@ export class Object {
         this.fx = 0;
         this.fy = 0;
     }
+
+    checkCollision(object) {
+        let collisionReq = (this.radius + object.radius);
+        let dist = (Math.sqrt((object.ref.x - this.ref.x) ** 2 + (object.ref.y - this.ref.y) ** 2));
+        console.log(collisionReq, dist);
+        return collisionReq >= dist;
+    }
 }
