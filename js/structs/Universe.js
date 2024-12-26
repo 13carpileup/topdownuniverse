@@ -37,13 +37,16 @@ export class Universe {
                 if (object1.checkCollision(object2)) {
                     console.log("COLLISION!")
                     if (object1.mass >= object2.mass) {
+                        
+                        
+                        //conservation of momentum
+                        object1.vx = (object1.vx * object1.mass + object2.vx * object2.mass) / (object1.mass + object2.mass);
+                        object1.vy = (object1.vy * object1.mass + object2.vy * object2.mass) / (object1.mass + object2.mass);
+
                         object1.mass += object2.mass;
-                        //conservation of forces?
-                        object1.vx += object2.vx;
-                        object1.vy += object2.vy;
 
                         object2.ref.destroy();
-                        this.Objects.splice(this.Objects.indexOf(object2));
+                        this.Objects.splice(this.Objects.indexOf(object2), 1);
                     }
 
                     return;
@@ -57,7 +60,7 @@ export class Universe {
 
                 let theta = Math.atan2(Dy, Dx);
 
-                let dist = Math.abs(Dx) + Math.abs(Dy);
+                let dist = Math.sqrt(distSquared);
 
                 object1.fx += (Dx / dist) * force; 
                 object1.fy += (Dy / dist) * force; 
@@ -71,8 +74,8 @@ export class Universe {
         // update movements, velocities
         this.Objects.forEach((object) => {
 
-            object.vx += object.fx * gameTime;
-            object.vy += object.fy * gameTime;
+            object.vx += (object.fx / object.mass) * gameTime;
+            object.vy += (object.fy / object.mass) * gameTime;
 
             object.ref.x += (object.vx) * (gameTime);
             object.ref.y += (object.vy) * (gameTime);
