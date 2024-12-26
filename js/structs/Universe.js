@@ -17,6 +17,9 @@ export class Universe {
 
         this.app.stage.on('pointerup', this.onDragEnd);
         this.app.stage.on('pointerupoutside', this.onDragEnd);
+
+        this.GravAmplification = (1 / 2);
+        this.FlingAmplification = (3);
     }
 
     onDragMove(event) {
@@ -32,8 +35,8 @@ export class Universe {
 
             let deltaTime = Date.now() - this.dragTarget.lastDragTime;
             
-            this.dragTarget.vx = (event.x - this.dragTarget.lastPos[0]) / deltaTime * (3 / 2); 
-            this.dragTarget.vy = (event.y - this.dragTarget.lastPos[1]) / deltaTime * (3 / 2); 
+            this.dragTarget.vx = (event.x - this.dragTarget.lastPos[0]) / deltaTime * this.FlingAmplification;
+            this.dragTarget.vy = (event.y - this.dragTarget.lastPos[1]) / deltaTime * this.FlingAmplification; 
 
             this.dragTarget.lastDragTime = Date.now();
             this.dragTarget.lastPos = [event.x, event.y];
@@ -76,6 +79,8 @@ export class Universe {
     }
 
     updateObjects(gameTime, local) {
+        this.Spacetime.update(this.Objects, local);
+
         // reset forces
         this.Objects.forEach((object) => {
             object.fx = 0;
@@ -107,7 +112,7 @@ export class Universe {
                 let Dy = (object2.y - object1.y);
 
                 let distSquared = Dx ** 2 + Dy ** 2;
-                let force = (object1.mass * object2.mass) / distSquared * (1 / 5);
+                let force = (object1.mass * object2.mass) / distSquared * this.GravAmplification;
 
                 let dist = Math.sqrt(distSquared);
 
@@ -132,7 +137,7 @@ export class Universe {
             object.ref.y = object.y + local[1];
         });
 
-        this.Spacetime.update(this.Objects, local);
+        
 
         return this.dragTarget;
     }
