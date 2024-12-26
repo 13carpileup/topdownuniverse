@@ -12,7 +12,7 @@ export class Spacetime {
 
         this.curves = []
 
-        for (let i = local[0] % this.dif; i < this.app.screen.width + 200; i += this.dif) {
+        for (let i = local[0] % this.dif - 200; i < this.app.screen.width + 200; i += this.dif) {
             let c = [i, this.app.screen.height / 2]; 
 
             this.createLine(
@@ -22,25 +22,27 @@ export class Spacetime {
             )
         }
 
-        for (let i = local[1] % this.dif; i < this.app.screen.height; i += this.dif) {
-            let c = [this.app.screen.width / 2, i]; 
+        for (let i = local[1] % this.dif - 200; i < this.app.screen.height + 200; i += this.dif) {
+            let c = [i, this.app.screen.width / 2]; 
 
             this.createLine(
                 [0, i],
-                this.getControlPoint(c, objects),
+                this.getControlPoint(c, objects, 1).reverse(),
                 [this.app.screen.width, i],
             )
         }
         
     }
 
-    getControlPoint(base, objects) {
+    getControlPoint(base, objects, rev=0) {
         let c = [...base];
 
         objects.forEach((object) => {
-            let dist = [object.ref.x - base[0], object.ref.y - base[1]]; 
+            let d1 = [object.ref.x, object.ref.y];
+            if (rev) d1.reverse();
+            let dist = [d1[0] - base[0], d1[1] - base[1]]; 
 
-            let factor = (object.mass) * (1 / (dist[0] ** 2 + dist[1] ** 2));
+            let factor = (object.mass) * (1 / (dist[0] ** 2)) * 3;
             factor = Math.min(factor, 1);
 
             c[0] += dist[0] * factor;
