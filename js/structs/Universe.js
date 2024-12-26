@@ -37,8 +37,6 @@ export class Universe {
 
             this.dragTarget.lastDragTime = Date.now();
             this.dragTarget.lastPos = [event.x, event.y];
-            
-            console.log(event.x, event.y);
         }
     }
 

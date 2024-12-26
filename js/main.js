@@ -1,6 +1,6 @@
 import { Object } from './structs/Object.js'
 import { Universe } from './structs/Universe.js';
-import { Slider } from './structs/UI.js';
+import { Slider, Button } from './structs/UI.js';
 
 let mouseDown = false;
 let local = [0, 0]
@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let gravityAmp = 1;
 let sliders = [];
+let newObject = {mass: 10, radius: 10};
+
 // async IIFE
 // essentially just immediately defines then calls an async function; one time use?
 (async () =>
@@ -56,17 +58,56 @@ let sliders = [];
     sliders.push(new Slider(app, {
         x: 50,
         y: app.screen.height - 100,
-        width: 300,
+        width: 150,
         min: 0,
         max: 100,
         value: 10,
         div:  10,
         onChange: (value) => {
             gravityAmp = value / 10;
-            console.log(`Slider value changed: ${value}`);
         },
         description: "Simulation Speed: "
     }));
+
+    sliders.push(new Slider(app, {
+        x: 250,
+        y: app.screen.height - 100,
+        width: 150,
+        min: 1,
+        max: 50,
+        value: 10,
+        div:  1,
+        onChange: (value) => {
+            newObject.radius = value;
+        },
+        description: "New Object Radius: "
+    }));
+
+    sliders.push(new Slider(app, {
+        x: 450,
+        y: app.screen.height - 100,
+        width: 150,
+        min: 1,
+        max: 5000,
+        value: 10,
+        div:  1,
+        onChange: (value) => {
+            newObject.mass = value;
+        },
+        description: "New Object Mass: "
+    }));
+
+    const button = new Button(app,
+        {
+            x: 650,
+            y: app.screen.height - 100,
+            description: "Create Object",
+            onClick: () => {
+                console.log(local[0], local[1]);
+                uni.addObject(20 - local[0], 20 - local[1], newObject.radius, 0, 0, newObject.mass);
+            }
+        }
+    )
 
     // boilerplate
     document.body.appendChild(app.canvas);

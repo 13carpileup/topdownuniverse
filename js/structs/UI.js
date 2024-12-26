@@ -1,4 +1,3 @@
-
 export class Slider {
     constructor(app, options) {
         this.app = app;
@@ -94,5 +93,53 @@ export class Slider {
         this.normalizedValue = (this.value - this.options.min) / (this.options.max - this.options.min);
         this.handle.x = this.normalizedValue * this.options.width;
         this.label.text = `${this.options.description} : ${this.value / this.options.div}`;
+    }
+}
+
+export class Button {
+    constructor(app, options) {
+        this.options = {
+            x: 0,
+            y: 0,
+            description: "Error!",
+            onClick: null,
+            ...options,
+        }
+
+        this.container = new PIXI.Container();
+        [this.container.x, this.container.y] = [this.options.x, this.options.y - 25];
+
+        this.background = new PIXI.Graphics();
+        this.background.beginFill(0x888888);
+        this.background.drawRoundedRect(0, 0, 150, 50, 10);
+        this.background.endFill();
+        this.background.interactive = true;
+        this.background.buttonMode = true;
+        
+        this.background.on('pointerdown', () => {
+            if (typeof this.options.onClick === 'function') {
+                this.options.onClick();
+            }
+        });
+
+        this.label = new PIXI.Text(this.options.description, {
+            fill: 0xFFFFFF,
+            fontSize: 20,
+            align: 'center',
+        });
+
+        this.label.x = (2 * this.options.x + 24) / 2;
+        this.label.y = this.options.y - 10.5;
+
+        this.label.on('pointerdown', () => {
+            if (typeof this.options.onClick === 'function') {
+                this.options.onClick();
+            }
+        });
+        
+        this.container.addChild(this.background);
+        this.container.addChild(this.label);
+        
+        app.stage.addChild(this.container);
     }
 }
