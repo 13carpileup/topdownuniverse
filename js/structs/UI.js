@@ -113,14 +113,8 @@ export class Button {
         this.background.beginFill(0x888888);
         this.background.drawRoundedRect(0, 0, 150, 50, 10);
         this.background.endFill();
-        this.background.interactive = true;
-        this.background.buttonMode = true;
-        
-        this.background.on('pointerdown', () => {
-            if (typeof this.options.onClick === 'function') {
-                this.options.onClick();
-            }
-        });
+        this.container.interactive = true;
+        this.container.buttonMode = true;
 
         this.label = new PIXI.Text(this.options.description, {
             fill: 0xFFFFFF,
@@ -128,17 +122,20 @@ export class Button {
             align: 'center',
         });
 
-        this.label.x = (2 * this.options.x + 24) / 2;
-        this.label.y = this.options.y - 10.5;
+        this.label.x = 13;
+        this.label.y = 13;
 
-        this.label.on('pointerdown', () => {
-            if (typeof this.options.onClick === 'function') {
-                this.options.onClick();
-            }
-        });
+  
         
         this.container.addChild(this.background);
         this.container.addChild(this.label);
+                
+        this.container.on('pointerdown', () => {
+            if (typeof this.options.onClick === 'function') {
+                console.log('yellow');
+                this.options.onClick();
+            }
+        });
         
         app.stage.addChild(this.container);
     }
