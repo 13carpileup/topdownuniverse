@@ -12,11 +12,13 @@ export class Slider {
             max: 100,
             value: 50,
             onChange: null, 
+            log: false,
             ...options,
         };
 
         this.value = this.options.value;
         this.normalizedValue = (this.value - this.options.min) / (this.options.max - this.options.min);
+        this.value /= this.options.div;
 
         this.sliderContainer = new PIXI.Container();
         this.sliderContainer.x = this.options.x;
@@ -36,7 +38,9 @@ export class Slider {
         this.handle.interactive = true;
         this.handle.cursor = 'pointer';
 
-        this.label = new PIXI.Text(`${this.options.description} : ${this.value / this.options.div}`, {
+        
+
+        this.label = new PIXI.Text(`${this.options.description} : ${this.value}`, {
             fill: 0xffffff,
             fontSize: 12,
         });
@@ -77,7 +81,14 @@ export class Slider {
             this.options.min + this.normalizedValue * (this.options.max - this.options.min)
         );
 
-        this.label.text = `${this.options.description} : ${this.value / this.options.div}`;
+        this.value /= this.options.div;
+
+        if (this.options.log) {
+            this.value = 10 ** (this.value);
+            this.value = Math.round(this.value);
+        }
+
+        this.label.text = `${this.options.description} : ${this.value}`;
 
         if (typeof this.options.onChange === 'function') {
             this.options.onChange(this.value);
@@ -86,13 +97,6 @@ export class Slider {
 
     getValue() {
         return this.value;
-    }
-
-    setValue(value) {
-        this.value = Math.max(this.options.min, Math.min(this.options.max, value));
-        this.normalizedValue = (this.value - this.options.min) / (this.options.max - this.options.min);
-        this.handle.x = this.normalizedValue * this.options.width;
-        this.label.text = `${this.options.description} : ${this.value / this.options.div}`;
     }
 }
 

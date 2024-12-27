@@ -52,7 +52,7 @@ let newObject = {mass: 10, radius: 10};
     let uni = new Universe(app);
     
     // app
-    uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 4, 0, 10);
+    uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 3, 0, 20);
     uni.addObject(app.screen.width / 2, app.screen.height / 2, 50, 0, 0, 9000);
 
     sliders.push(new Slider(app, {
@@ -64,7 +64,7 @@ let newObject = {mass: 10, radius: 10};
         value: 10,
         div:  10,
         onChange: (value) => {
-            gravityAmp = value / 10;
+            gravityAmp = value;
         },
         description: "Simulation Speed: "
     }));
@@ -88,9 +88,10 @@ let newObject = {mass: 10, radius: 10};
         y: app.screen.height - 100,
         width: 150,
         min: 1,
-        max: 10000,
-        value: 10,
-        div:  1,
+        max: 500,
+        value: 1,
+        div:  100,
+        log: true,
         onChange: (value) => {
             newObject.mass = value;
         },
@@ -113,6 +114,6 @@ let newObject = {mass: 10, radius: 10};
     document.body.appendChild(app.canvas);
     app.ticker.add((time) =>
     {
-        dragTarget = uni.updateObjects(time.deltaTime * gravityAmp, local);
+        dragTarget = uni.updateObjects(time.deltaTime * gravityAmp / 5, local);
     });
 })();

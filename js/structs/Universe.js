@@ -19,7 +19,7 @@ export class Universe {
         this.app.stage.on('pointerupoutside', this.onDragEnd);
 
         this.GravAmplification = (1 / 2);
-        this.FlingAmplification = (3);
+        this.FlingAmplification = (10);
     }
 
     onDragMove(event) {
