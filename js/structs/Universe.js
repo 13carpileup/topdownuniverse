@@ -27,7 +27,12 @@ export class Universe {
         this.local = [0, 0];
 
         this.target = false;
+
+        this.tooltip = null;
     }
+
+
+    
 
     onDragMove(event) {
         if (this.dragTarget) {
@@ -64,36 +69,31 @@ export class Universe {
     }
 
 
-    addObject(x, y, radius, velocity, angle, mass, buttonPress) {
-        const gr  = new PIXI.Graphics();
+    addObject(x, y, radius, velocity, angle, mass) {
+        const gr = new PIXI.Graphics();
         gr.beginFill(0xffffff);
         gr.drawCircle(0, 0, radius);
         gr.endFill();
     
-        //gr.anchor.set(0.5) // anchors centre the sprite to the middle of the object! (though i guess not for graphics)
         gr.eventMode = 'static';
         gr.cursor = 'pointer';
-
+    
         gr.x = x - radius;
         gr.y = y - radius;
         this.app.stage.addChild(gr);
-
+    
         let newObject = new Object(gr, radius, x, y, velocity, angle, mass);
-        newObject.ref.on('pointerdown', () => {
+        
+        newObject.ref.on('pointerdown', (event) => {
             if ((Date.now() - newObject.lastClick) < 300) {
                 if (this.target == newObject) this.target = false;
                 else this.target = newObject;
             }
-
             newObject.lastClick = Date.now();
-            this.onDragStart(newObject)
-        }); // janky ass js code
-        this.Objects.push(newObject);
-
-        if (buttonPress) {
             this.onDragStart(newObject);
-            this.buttonPressed = Date.now();
-        }
+        });
+
+        this.Objects.push(newObject);
     }
 
     updateObjects(gameTime, local, grid) {

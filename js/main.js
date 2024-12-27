@@ -154,6 +154,7 @@ let newObject = {mass: 10, radius: 10};
 
     buttons.push(helpButton);
 
+
     
 
     window.addEventListener('resize', () => handleResize(app, sliders, buttons));

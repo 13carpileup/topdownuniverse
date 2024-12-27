@@ -8,6 +8,7 @@ export const createControlsPopup = () => {
         <p><strong>Create Object:</strong> Use sliders to set mass and radius, then click "Create". The newly created object will follow your mouse until you click.</p>
         <p><strong>Manipulate Objects:</strong> Click and drag objects to move them</p>
         <p><strong>Fling Objects:</strong> Drag quickly and release to give objects velocity</p>
+        <p><strong>Follow Objects:</strong> Double click an object to follow it. Double click it again to stop following it.</p>
         <p><strong>Grid Toggle:</strong> Click "Grid" to toggle gravitational field visualization</p>
         <p><strong>Speed Control:</strong> Adjust simulation speed using the speed slider</p>
         <p><strong>Tips:</strong></p>
