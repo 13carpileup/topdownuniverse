@@ -1,7 +1,7 @@
 export class Spacetime {
     constructor(app) {
         this.app = app;
-        this.density = 40; // smaller = more accurate
+        this.density = 50; // smaller = more accurate
         this.notFirst = 0
         this.lines = new Map();
     }
