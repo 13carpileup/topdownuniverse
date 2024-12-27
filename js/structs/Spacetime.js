@@ -10,6 +10,8 @@ export class Spacetime {
             curve.clear();
         });
 
+        this.curves = [];
+
         this.drawLines(local[0] % this.density - 100, this.density, local[1] % this.density - 100, this.density, objects);
     }
 
