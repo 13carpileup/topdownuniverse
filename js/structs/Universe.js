@@ -21,11 +21,15 @@ export class Universe {
 
         this.GravAmplification = (1 / 2);
         this.FlingAmplification = (8);
+
+        this.buttonPressed = false;
     }
 
     onDragMove(event) {
         if (this.dragTarget) {
-            this.dragTarget.ref.parent.toLocal(event.global, null, this.dragTarget.position);
+            console.log("DRAGGIN!")
+
+            //this.dragTarget.ref.parent.toLocal(event.global, null, this.dragTarget.position);
             let delta = [event.x - this.dragTarget.ref.x, event.y - this.dragTarget.ref.y];
 
             this.dragTarget.ref.x += delta[0];
@@ -52,15 +56,18 @@ export class Universe {
     }
 
     onDragEnd() {
-        if (this.dragTarget) {
+        if (this.dragTarget && (!this.buttonPressed || (Date.now() - this.buttonPressed) > 200)) {
+            console.log('drag ending.... SAD!!')
             this.app.stage.off('pointermove', this.onDragMove);
             this.dragTarget.dragging = 0;
             this.dragTarget = null;
+
+            this.buttonPressed = false;
         }
     }
 
 
-    addObject(x, y, radius, velocity, angle, mass) {
+    addObject(x, y, radius, velocity, angle, mass, buttonPress) {
         const gr  = new PIXI.Graphics();
         gr.beginFill(0xffffff);
         gr.drawCircle(0, 0, radius);
@@ -77,9 +84,16 @@ export class Universe {
         let newObject = new Object(gr, radius, x, y, velocity, angle, mass);
         newObject.ref.on('pointerdown', () => this.onDragStart(newObject)); // janky ass js code
         this.Objects.push(newObject);
+
+        if (buttonPress) {
+            this.onDragStart(newObject);
+            this.buttonPressed = Date.now();
+        }
     }
 
     updateObjects(gameTime, local, grid) {
+        console.log(this.Objects)
+
         if (grid) this.Spacetime.update(this.Objects, local);
         else this.Spacetime.clear();
 
@@ -98,10 +112,25 @@ export class Universe {
                     //console.log("COLLISION!")
                     if (object1.mass >= object2.mass) {
                         //conservation of momentum
-                        object1.vx = (object1.vx * object1.mass + object2.vx * object2.mass) / (object1.mass + object2.mass);
-                        object1.vy = (object1.vy * object1.mass + object2.vy * object2.mass) / (object1.mass + object2.mass);
+                        const newVx = (object1.vx * object1.mass + object2.vx * object2.mass) / (object1.mass + object2.mass);
+                        const newVy = (object1.vy * object1.mass + object2.vy * object2.mass) / (object1.mass + object2.mass);
+                        
+                        console.log(newVx, newVy);
 
-                        object1.mass += object2.mass;
+                        if (!isNaN(newVx) && !isNaN(newVy)) {
+                            object1.vx = newVx;
+                            object1.vy = newVy;
+                            object1.mass += object2.mass;
+                        }
+
+
+                        // object1.vx = (object1.vx * object1.mass + object2.vx * object2.mass) / (object1.mass + object2.mass);
+                        // object1.vy = (object1.vy * object1.mass + object2.vy * object2.mass) / (object1.mass + object2.mass);
+
+                        // object1.mass += object2.mass;
+                        
+                        //todo: collision splits
+                        //this.addObject(object2.x + object2.radius + 10, object2.y + object2.radius + 10, object2.radius / 4, object1.velocity, -object1.angle, object2.mass / 4);
 
                         object2.ref.destroy();
                         this.Objects.splice(this.Objects.indexOf(object2), 1);

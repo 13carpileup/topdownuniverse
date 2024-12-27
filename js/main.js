@@ -107,7 +107,7 @@ let newObject = {mass: 10, radius: 10};
             description: "Create Object",
             onClick: () => {
                 console.log(local[0], local[1]);
-                uni.addObject(20 - local[0], 20 - local[1], newObject.radius, 0, 0, newObject.mass);
+                uni.addObject(20 - local[0], 20 - local[1], newObject.radius, 0, 0, newObject.mass, true);
             }
         }
     )
@@ -126,8 +126,6 @@ let newObject = {mass: 10, radius: 10};
             }
         }
     )
-
-
 
     // boilerplate
     document.body.appendChild(app.canvas);

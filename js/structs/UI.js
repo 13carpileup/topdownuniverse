@@ -42,7 +42,7 @@ export class Slider {
 
         this.label = new PIXI.Text(`${this.options.description} : ${this.value}`, {
             fill: 0xffffff,
-            fontSize: 12,
+            fontSize: 15,
         });
         this.label.anchor.set(0.5);
         this.label.x = this.options.width / 2;
