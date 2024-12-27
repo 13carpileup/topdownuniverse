@@ -27,7 +27,6 @@ export class Universe {
         this.local = [0, 0];
 
         this.target = false;
-
         this.tooltip = null;
     }
 
@@ -69,7 +68,7 @@ export class Universe {
     }
 
 
-    addObject(x, y, radius, velocity, angle, mass) {
+    addObject(x, y, radius, velocity, angle, mass, button) {
         const gr = new PIXI.Graphics();
         gr.beginFill(0xffffff);
         gr.drawCircle(0, 0, radius);
@@ -92,6 +91,11 @@ export class Universe {
             newObject.lastClick = Date.now();
             this.onDragStart(newObject);
         });
+
+        if (button) {
+            this.onDragStart(newObject);
+            this.buttonPressed = Date.now();
+        }
 
         this.Objects.push(newObject);
     }
