@@ -19,6 +19,8 @@ export class Object {
         this.dragging = 0;
         this.lastDragTime = 0;
         this.lastPos = [0, 0];
+
+        this.lastClick = 0;
     }
 
     checkCollision(object) {

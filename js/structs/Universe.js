@@ -24,7 +24,9 @@ export class Universe {
 
         this.buttonPressed = false;
 
-        this.local = [0, 0]
+        this.local = [0, 0];
+
+        this.target = false;
     }
 
     onDragMove(event) {
@@ -77,7 +79,15 @@ export class Universe {
         this.app.stage.addChild(gr);
 
         let newObject = new Object(gr, radius, x, y, velocity, angle, mass);
-        newObject.ref.on('pointerdown', () => this.onDragStart(newObject)); // janky ass js code
+        newObject.ref.on('pointerdown', () => {
+            if ((Date.now() - newObject.lastClick) < 300) {
+                if (this.target == newObject) this.target = false;
+                else this.target = newObject;
+            }
+
+            newObject.lastClick = Date.now();
+            this.onDragStart(newObject)
+        }); // janky ass js code
         this.Objects.push(newObject);
 
         if (buttonPress) {
@@ -161,8 +171,10 @@ export class Universe {
             object.ref.y = object.y + local[1];
         });
 
-        
+        if (this.target) {
+            local = [this.app.screen.width / 2 - this.target.x, this.app.screen.height / 2 - this.target.y];
+        }
 
-        return this.dragTarget;
+        return {dragTarget: this.dragTarget, local: local};
     }
 }
