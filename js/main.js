@@ -98,10 +98,12 @@ let newObject = {mass: 10, radius: 10};
         description: "New Object Mass: "
     }));
 
-    const button = new Button(app,
+    const b1 = new Button(app,
         {
             x: 650,
             y: app.screen.height - 100,
+            width: 150,
+            height: 50,
             description: "Create Object",
             onClick: () => {
                 console.log(local[0], local[1]);
@@ -110,10 +112,27 @@ let newObject = {mass: 10, radius: 10};
         }
     )
 
+    let grid = 1
+
+    const b2 = new Button(app,
+        {
+            x: 850,
+            y: app.screen.height - 100,
+            width: 130,
+            height: 50,
+            description: "Toggle Grid",
+            onClick: () => {
+                grid = !grid;
+            }
+        }
+    )
+
+
+
     // boilerplate
     document.body.appendChild(app.canvas);
     app.ticker.add((time) =>
     {
-        dragTarget = uni.updateObjects(time.deltaTime * gravityAmp / 3, local);
+        dragTarget = uni.updateObjects(time.deltaTime * gravityAmp / 3, local, grid);
     });
 })();

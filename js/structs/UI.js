@@ -115,7 +115,7 @@ export class Button {
 
         this.background = new PIXI.Graphics();
         this.background.beginFill(0x888888);
-        this.background.drawRoundedRect(0, 0, 150, 50, 10);
+        this.background.drawRoundedRect(0, 0, this.options.width, this.options.height, 10);
         this.background.endFill();
         this.container.interactive = true;
         this.container.buttonMode = true;

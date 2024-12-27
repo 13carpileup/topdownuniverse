@@ -92,4 +92,15 @@ export class Spacetime {
         line.lineTo(end[0], end[1]);
         line.stroke({width: 1, color: 0x82cbff});
     }
+
+    clear() {
+        this.lines.forEach((value, _key) => {
+            value.clear();
+            value.destroy();
+        });
+
+        this.lines = new Map();
+        
+        this.notFirst = 0;
+    }
 }

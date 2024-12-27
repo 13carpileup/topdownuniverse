@@ -3,8 +3,9 @@ import { Spacetime } from "./Spacetime.js";
 
 export class Universe {
     constructor(app) {
-        this.Objects = [];
         this.Spacetime = new Spacetime(app);
+
+        this.Objects = [];
         this.app = app;
 
         this.dragTarget = null;
@@ -78,8 +79,9 @@ export class Universe {
         this.Objects.push(newObject);
     }
 
-    updateObjects(gameTime, local) {
-        this.Spacetime.update(this.Objects, local);
+    updateObjects(gameTime, local, grid) {
+        if (grid) this.Spacetime.update(this.Objects, local);
+        else this.Spacetime.clear();
 
         // reset forces
         this.Objects.forEach((object) => {
