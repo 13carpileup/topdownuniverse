@@ -1,27 +1,21 @@
 import { Object } from './structs/Object.js'
 import { Universe } from './structs/Universe.js';
 import { Slider, Button } from './structs/UI.js';
+import { showControlsPopup, createControlsPopup, handleResize } from './util.js';
+
+// controls on first visit
+const hasVisited = localStorage.getItem('hasVisitedBefore');
+if (!hasVisited) {
+    setTimeout(() => {
+        showControlsPopup();
+        localStorage.setItem('hasVisitedBefore', 'true');
+    }, 500);
+}
 
 let mouseDown = false;
 let local = [0, 0]
 let last = [0, 0]
 let dragTarget = null;
-
-function handleResize(app, sliders, buttons) {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    
-    const bottomMargin = height * 0.1;
-    const sliderWidth = Math.min(150, width * 0.15);
-    const spacing = Math.min(50, width * 0.03); 
-    
-    sliders[0].updatePosition(spacing, height - bottomMargin, sliderWidth);
-    sliders[1].updatePosition(spacing * 2 + sliderWidth, height - bottomMargin, sliderWidth);
-    sliders[2].updatePosition(spacing * 3 + sliderWidth * 2, height - bottomMargin, sliderWidth);
-    
-    buttons[0].updatePosition(spacing * 4 + sliderWidth * 3, height - bottomMargin);
-    buttons[1].updatePosition(spacing * 5 + sliderWidth * 3 + 150, height - bottomMargin);
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousedown', (event) => {
@@ -112,6 +106,8 @@ let newObject = {mass: 10, radius: 10};
         },
         description: "New Object Mass: "
     }));
+    
+    let buttons = []
 
     const b1 = new Button(app,
         {
@@ -121,17 +117,18 @@ let newObject = {mass: 10, radius: 10};
             height: 50,
             description: "Create Object",
             onClick: () => {
-                console.log(local[0], local[1]);
                 uni.addObject(20 - local[0], 20 - local[1], newObject.radius, 0, 0, newObject.mass, true);
             }
         }
     )
 
+    buttons.push(b1);
+
     let grid = 1
 
     const b2 = new Button(app,
         {
-            x: 850,
+            x: buttons[buttons.length - 1].options.x + buttons[buttons.length - 1].options.width + 30,
             y: app.screen.height - 100,
             width: 130,
             height: 50,
@@ -142,7 +139,22 @@ let newObject = {mass: 10, radius: 10};
         }
     )
 
-    let buttons = [b1, b2];
+    buttons.push(b2);
+
+    const helpButton = new Button(app, {
+        x: buttons[buttons.length - 1].options.x + buttons[buttons.length - 1].options.width + 30,
+        y: app.screen.height - 100,
+        width: 100,
+        height: 50,
+        description: "Controls",
+        onClick: () => {
+            showControlsPopup();
+        }
+    });
+
+    buttons.push(helpButton);
+
+    
 
     window.addEventListener('resize', () => handleResize(app, sliders, buttons));
 

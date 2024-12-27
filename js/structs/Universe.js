@@ -20,7 +20,7 @@ export class Universe {
         this.app.stage.on('pointerupoutside', this.onDragEnd);
 
         this.GravAmplification = (1 / 2);
-        this.FlingAmplification = (8);
+        this.FlingAmplification = (12);
 
         this.buttonPressed = false;
 
@@ -46,7 +46,6 @@ export class Universe {
     }
 
     onDragStart(object) {
-        console.log("DRAG START!");
         this.dragTarget = object;
         this.app.stage.on('pointermove', this.onDragMove);
         object.dragging = 1;
@@ -54,7 +53,6 @@ export class Universe {
 
     onDragEnd() {
         if (this.dragTarget && (!this.buttonPressed || (Date.now() - this.buttonPressed) > 200)) {
-            console.log('drag ending.... SAD!!')
             this.app.stage.off('pointermove', this.onDragMove);
             this.dragTarget.dragging = 0;
             this.dragTarget = null;
@@ -89,8 +87,6 @@ export class Universe {
     }
 
     updateObjects(gameTime, local, grid) {
-        console.log(this.Objects)
-
         this.local = local;
 
         if (grid) this.Spacetime.update(this.Objects, local);
@@ -114,8 +110,6 @@ export class Universe {
                         const newVx = (object1.vx * object1.mass + object2.vx * object2.mass) / (object1.mass + object2.mass);
                         const newVy = (object1.vy * object1.mass + object2.vy * object2.mass) / (object1.mass + object2.mass);
                         
-                        console.log(newVx, newVy);
-
                         if (!isNaN(newVx) && !isNaN(newVy)) {
                             object1.vx = newVx;
                             object1.vy = newVy;

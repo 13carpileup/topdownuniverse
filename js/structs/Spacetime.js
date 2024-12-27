@@ -66,7 +66,6 @@ export class Spacetime {
                     const key = `${i-1},${j},${i},${j}`;
 
                     if (!this.lines.has(key)) {
-                        console.log('no cache...')
                         line = new PIXI.Graphics();
                         line.alpha = 0.2;
                         this.app.stage.addChild(line);
@@ -74,7 +73,6 @@ export class Spacetime {
                         this.lines.set(key, line);
                     }
                     else {
-                        console.log('cached!')
                         line = this.lines.get(key);
                     }
 
