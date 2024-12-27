@@ -93,6 +93,27 @@ export class Slider {
         if (typeof this.options.onChange === 'function') {
             this.options.onChange(this.value);
         }
+
+
+    }
+
+
+    updatePosition(x, y, width) {
+        this.options.x = x;
+        this.options.y = y;
+        this.options.width = width;
+        
+        this.sliderContainer.x = x;
+        this.sliderContainer.y = y;
+        
+        this.track.clear();
+        this.track.beginFill(0x272d37);
+        this.track.drawRect(0, 0, width, this.options.height);
+        this.track.endFill();
+        
+        this.label.x = width / 2;
+        
+        this.handle.x = this.normalizedValue * width;
     }
 
     getValue() {
@@ -140,5 +161,12 @@ export class Button {
         });
         
         app.stage.addChild(this.container);
+    }
+
+    updatePosition(x, y) {
+        this.options.x = x;
+        this.options.y = y;
+        this.container.x = x;
+        this.container.y = y - 25;
     }
 }
