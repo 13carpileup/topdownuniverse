@@ -23,14 +23,16 @@ export class Universe {
         this.FlingAmplification = (8);
 
         this.buttonPressed = false;
+
+        this.local = [0, 0]
     }
 
     onDragMove(event) {
         if (this.dragTarget) {
             this.dragTarget.ref.x = event.x;
             this.dragTarget.ref.y = event.y;
-            this.dragTarget.x = event.x; 
-            this.dragTarget.y = event.y;
+            this.dragTarget.x = event.x - this.local[0]; 
+            this.dragTarget.y = event.y - this.local[1];
 
             let deltaTime = Date.now() - this.dragTarget.lastDragTime;
             deltaTime = Math.max(deltaTime, 1);
@@ -88,6 +90,8 @@ export class Universe {
 
     updateObjects(gameTime, local, grid) {
         console.log(this.Objects)
+
+        this.local = local;
 
         if (grid) this.Spacetime.update(this.Objects, local);
         else this.Spacetime.clear();
