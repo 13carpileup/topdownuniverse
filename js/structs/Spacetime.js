@@ -2,7 +2,8 @@ export class Spacetime {
     constructor(app) {
         this.app = app;
         this.density = 50; // smaller = more accurate
-        this.notFirst = 0
+        this.notFirst = 0;
+        this.forceAdjustment = 10000;
         this.lines = new Map();
     }
 
@@ -23,7 +24,7 @@ export class Spacetime {
                     let dy = y - object.ref.y;
 
                     let distSquared = Math.max(dx ** 2 + dy ** 2, 0.001);
-                    let force = (object.mass * 1000) / distSquared;
+                    let force = (object.mass * this.forceAdjustment) / distSquared;
 
                     let deltaForces = [dx / distSquared * force, dy / distSquared * force];
 
