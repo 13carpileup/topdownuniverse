@@ -39,6 +39,7 @@ export class Universe {
             this.dragTarget.y += delta[1];
 
             let deltaTime = Date.now() - this.dragTarget.lastDragTime;
+            deltaTime = Math.max(deltaTime, 1);
             
             this.dragTarget.vx = (event.x - this.dragTarget.lastPos[0]) / deltaTime * this.FlingAmplification;
             this.dragTarget.vy = (event.y - this.dragTarget.lastPos[1]) / deltaTime * this.FlingAmplification; 

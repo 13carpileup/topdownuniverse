@@ -53,7 +53,7 @@ let newObject = {mass: 10, radius: 10};
     
     // app
     uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 3, 0, 20);
-    uni.addObject(app.screen.width / 2, app.screen.height / 2, 50, 0, 0, 9000);
+    uni.addObject(app.screen.width / 2, app.screen.height / 2, 50, 0, 0, 7000);
 
     sliders.push(new Slider(app, {
         x: 50,
