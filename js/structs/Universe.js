@@ -27,16 +27,10 @@ export class Universe {
 
     onDragMove(event) {
         if (this.dragTarget) {
-            console.log("DRAGGIN!")
-
-            //this.dragTarget.ref.parent.toLocal(event.global, null, this.dragTarget.position);
-            let delta = [event.x - this.dragTarget.ref.x, event.y - this.dragTarget.ref.y];
-
-            this.dragTarget.ref.x += delta[0];
-            this.dragTarget.ref.y += delta[1];
-
-            this.dragTarget.x += delta[0];
-            this.dragTarget.y += delta[1];
+            this.dragTarget.ref.x = event.x;
+            this.dragTarget.ref.y = event.y;
+            this.dragTarget.x = event.x; 
+            this.dragTarget.y = event.y;
 
             let deltaTime = Date.now() - this.dragTarget.lastDragTime;
             deltaTime = Math.max(deltaTime, 1);
