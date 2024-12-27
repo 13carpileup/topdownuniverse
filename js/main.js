@@ -114,6 +114,6 @@ let newObject = {mass: 10, radius: 10};
     document.body.appendChild(app.canvas);
     app.ticker.add((time) =>
     {
-        dragTarget = uni.updateObjects(time.deltaTime * gravityAmp / 5, local);
+        dragTarget = uni.updateObjects(time.deltaTime * gravityAmp / 3, local);
     });
 })();
