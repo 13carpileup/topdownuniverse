@@ -61,8 +61,8 @@ let newObject = {mass: 10, radius: 10};
     let uni = new Universe(app);
     
     // app
-    uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 3, 0, 20);
-    uni.addObject(app.screen.width / 2, app.screen.height / 2, 50, 0, 0, 7000);
+    uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 4.08, 0, 1);
+    uni.addObject(app.screen.width / 2, app.screen.height / 2, 130, 0, 0, 10000);
 
     sliders.push(new Slider(app, {
         x: 50,
@@ -83,7 +83,7 @@ let newObject = {mass: 10, radius: 10};
         y: app.screen.height - 100,
         width: 150,
         min: 1,
-        max: 50,
+        max: 200,
         value: 10,
         div:  1,
         onChange: (value) => {

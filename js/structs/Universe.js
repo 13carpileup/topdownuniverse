@@ -1,5 +1,6 @@
 import { Object } from "./Object.js";
 import { Spacetime } from "./Spacetime.js";
+import { constants } from "../constants.js";
 
 export class Universe {
     constructor(app) {
@@ -19,8 +20,8 @@ export class Universe {
         this.app.stage.on('pointerup', this.onDragEnd);
         this.app.stage.on('pointerupoutside', this.onDragEnd);
 
-        this.GravAmplification = (1 / 2);
-        this.FlingAmplification = (12);
+        this.GravAmplification = constants.gravitationalConstant;
+        this.FlingAmplification = constants.flingAmplification;
 
         this.buttonPressed = false;
 

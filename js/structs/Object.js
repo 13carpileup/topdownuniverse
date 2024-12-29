@@ -1,3 +1,5 @@
+import { constants } from "../constants";
+
 export class Object {
     constructor(ref, radius, x, y, velocity, angle, mass) {
         this.ref = ref;
@@ -11,7 +13,6 @@ export class Object {
         this.vx = Math.cos(angle) * velocity;
         this.vy = Math.sin(angle) * velocity;
 
-
         this.mass = mass;
         this.fx = 0;
         this.fy = 0;
@@ -21,7 +22,17 @@ export class Object {
         this.lastPos = [0, 0];
 
         this.lastClick = 0;
+
+        this.trails = [];
+        this.lastTrailPos = [this.x, this.y];
+        this.state = 1;
+        this.trailTimes = [constants.trailOn, constants.trailOff] // 0 - trail on, 1 - trail off
+        this.last = 0;
     }
+
+    // updateTrail(gameTime) {
+    //     if 
+    // }
 
     checkCollision(object) {
         let collisionReq = (this.radius + object.radius);
