@@ -35,8 +35,6 @@ export class Object {
     }
 
     updateTrail(gameTime) {
-        console.log(this.tIndex);
-
         let n = constants.trailLength;
         let dIndex = (this.tIndex - 1 + n) % n;
         let fromDist = Math.sqrt((this.trails[dIndex].to[0] - this.x) ** 2 + (this.trails[dIndex].to[1] - this.y) ** 2); 
@@ -77,8 +75,14 @@ export class Object {
 
             let newLine = new PIXI.Graphics();
 
+            let add = 0;
+            if (this.trailing) {
+                let dist = Math.sqrt((this.lastTrailPos[0] - this.x) ** 2 + (this.lastTrailPos[1] - this.y) ** 2);
+                add -= dist / constants.trailOn;
+            }
 
-            newLine.alpha = ((i - start + n - 1) % n) / n;
+
+            newLine.alpha = ((i - start + n - 1) % n + add) / n;
 
             newLine.moveTo(line.from[0] + local[0], line.from[1] + local[1]);
             newLine.lineTo(line.to[0] + local[0], line.to[1] + local[1]);
