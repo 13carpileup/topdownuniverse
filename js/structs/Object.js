@@ -88,6 +88,19 @@ export class Object {
 
             this.trailLines.push(newLine);
         }
+
+        if (this.trailing) {
+
+            let newLine = new PIXI.Graphics();
+
+            newLine.moveTo(this.lastTrailPos[0] + local[0], this.lastTrailPos[1] + local[1]);
+            newLine.lineTo(this.x + local[0], this.y + local[1]);
+            newLine.stroke({width: 3, color: 0xDDDDDD});
+
+            this.app.stage.addChild(newLine);
+
+            this.trailLines.push(newLine);
+        }
     }
 
     destroy() {
