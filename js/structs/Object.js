@@ -25,14 +25,53 @@ export class Object {
 
         this.trails = [];
         this.lastTrailPos = [this.x, this.y];
-        this.state = 1;
-        this.trailTimes = [constants.trailOn, constants.trailOff] // 0 - trail on, 1 - trail off
-        this.last = 0;
+        this.trailing = true;
+        this.accumulated = 0;
+
+        this.trailLines = [];
     }
 
-    // updateTrail(gameTime) {
-    //     if 
-    // }
+    updateTrail(gameTime) {
+        this.accumulated += gameTime;
+
+        if (this.trailing && this.accumulated >= constants.trailOn) {
+            this.trails.push([this.lastTrailPos, [this.x, this.y]]);
+            this.trailing = false;
+
+            this.accumulated %= constants.trailOn;
+        }
+
+        else if (!this.trailing && this.accumulated >= constants.trailOff) {
+            this.lastTrailPos = [this.x, this.y];
+            this.trailing = true;
+
+            this.accumulated %= constants.trailOff;
+        }
+
+        if (this.trails.length > 10) {
+            this.trails.shift();
+        }
+    }
+
+    drawTrails(app, local) {
+        this.trailLines.forEach((line) => {
+            line.destroy();
+        })
+
+        this.trailLines = [];
+
+        this.trails.forEach((line) => {
+            let newLine = new PIXI.Graphics();
+            newLine.alpha = 0.7;
+            app.stage.addChild(newLine);
+
+            newLine.moveTo(line[0][0] + local[0], line[0][1] + local[1]);
+            newLine.lineTo(line[1][0] + local[0], line[1][1] + local[1]);
+            newLine.stroke({width: 3, color: 0xDDDDDD});
+
+            this.trailLines.push(newLine);
+        })
+    }
 
     checkCollision(object) {
         let collisionReq = (this.radius + object.radius);

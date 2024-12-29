@@ -30,8 +30,6 @@ export class Universe {
         this.target = false;
         this.tooltip = null;
     }
-
-
     
 
     onDragMove(event) {
@@ -109,6 +107,9 @@ export class Universe {
 
         // reset forces
         this.Objects.forEach((object) => {
+            object.updateTrail(gameTime);
+            object.drawTrails(this.app, local);
+
             object.fx = 0;
             object.fy = 0;
         })
