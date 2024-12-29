@@ -1,4 +1,4 @@
-import { constants } from "../constants";
+import { constants } from "../constants.js";
 
 export class Object {
     constructor(ref, radius, x, y, velocity, angle, mass) {
