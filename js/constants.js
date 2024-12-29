@@ -4,7 +4,7 @@ export const constants = {
     flingAmplification: 8,
 
     // trails
-    trailOn: 4,
-    trailOff: 15,
-    trailLength: 20,
+    trailOn: 20,
+    trailOff: 20,
+    trailLength: 35,
 }

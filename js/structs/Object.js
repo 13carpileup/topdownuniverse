@@ -24,10 +24,10 @@ export class Object {
         this.lastClick = 0;
 
         this.trails = new Array(constants.trailLength);
+        this.trails[0] = {"from":[this.x, this.y], "to":[this.x, this.y]};
         this.lastTrailPos = [this.x, this.y];
         this.trailing = true;
-        this.accumulated = 0;
-        this.tIndex = 0;
+        this.tIndex = 1;
 
         this.trailLines = [];
 
@@ -35,24 +35,28 @@ export class Object {
     }
 
     updateTrail(gameTime) {
-        this.accumulated += gameTime;
+        console.log(this.tIndex);
 
-        if (this.trailing && this.accumulated >= constants.trailOn) {
+        let n = constants.trailLength;
+        let dIndex = (this.tIndex - 1 + n) % n;
+        let fromDist = Math.sqrt((this.trails[dIndex].to[0] - this.x) ** 2 + (this.trails[dIndex].to[1] - this.y) ** 2); 
+        let toDist = Math.sqrt((this.lastTrailPos[0] - this.x) ** 2 + (this.lastTrailPos[1] - this.y) ** 2); 
+
+        if (this.trailing && toDist >= constants.trailOn) {
             this.trails[this.tIndex] = {"from":this.lastTrailPos, "to":[this.x, this.y]};
-            this.trailing = false;
-
-            this.accumulated %= constants.trailOn;
-
+            
             this.tIndex += 1;
-            this.tIndex %= constants.trailLength;
+            this.tIndex %= n;
+
+            this.trailing = false;
         }
 
-        else if (!this.trailing && this.accumulated >= constants.trailOff) {
-            this.lastTrailPos = [this.x, this.y];
+        else if (!this.trailing && fromDist >= constants.trailOff) {
             this.trailing = true;
 
-            this.accumulated %= constants.trailOff;
+            this.lastTrailPos = [this.x, this.y];
         }
+
     }
 
     drawTrails(local) {
