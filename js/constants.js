@@ -6,5 +6,5 @@ export const constants = {
     // trails
     trailOn: 4,
     trailOff: 15,
-    trailLength: 10,
+    trailLength: 20,
 }

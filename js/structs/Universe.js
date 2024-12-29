@@ -141,7 +141,7 @@ export class Universe {
                         //todo: collision splits
                         //this.addObject(object2.x + object2.radius + 10, object2.y + object2.radius + 10, object2.radius / 4, object1.velocity, -object1.angle, object2.mass / 4);
 
-                        object2.ref.destroy();
+                        object2.destroy();
                         this.Objects.splice(this.Objects.indexOf(object2), 1);
                     }
 

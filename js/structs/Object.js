@@ -65,17 +65,16 @@ export class Object {
         let n = constants.trailLength;
 
         const start = (this.tIndex == 0) ? (n - 1) : this.tIndex - 1;
-        console.log(start)
 
         for (let i = start; i < (start + n); i++) {
-            console.log(i, this.trails);
             let line = this.trails[i % n];
 
             if (!line) continue;
 
             let newLine = new PIXI.Graphics();
 
-            newLine.alpha = 0.7;
+
+            newLine.alpha = ((i - start + n - 1) % n) / n;
 
             newLine.moveTo(line.from[0] + local[0], line.from[1] + local[1]);
             newLine.lineTo(line.to[0] + local[0], line.to[1] + local[1]);
@@ -84,8 +83,15 @@ export class Object {
             this.app.stage.addChild(newLine);
 
             this.trailLines.push(newLine);
-
         }
+    }
+
+    destroy() {
+        this.ref.destroy();
+
+        this.trailLines.forEach((trail) => {
+            trail.destroy();
+        })
     }
 
     checkCollision(object) {
