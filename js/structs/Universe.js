@@ -80,7 +80,7 @@ export class Universe {
         gr.y = y - radius;
         this.app.stage.addChild(gr);
     
-        let newObject = new Object(gr, radius, x, y, velocity, angle, mass);
+        let newObject = new Object(gr, radius, x, y, velocity, angle, mass, this.app);
         
         newObject.ref.on('pointerdown', (event) => {
             if ((Date.now() - newObject.lastClick) < 300) {
@@ -108,7 +108,7 @@ export class Universe {
         // reset forces
         this.Objects.forEach((object) => {
             object.updateTrail(gameTime);
-            object.drawTrails(this.app, local);
+            object.drawTrails(local);
 
             object.fx = 0;
             object.fy = 0;

@@ -1,7 +1,7 @@
 import { constants } from "../constants.js";
 
 export class Object {
-    constructor(ref, radius, x, y, velocity, angle, mass) {
+    constructor(ref, radius, x, y, velocity, angle, mass, app) {
         this.ref = ref;
         this.radius = radius;
         this.x = x;
@@ -23,22 +23,28 @@ export class Object {
 
         this.lastClick = 0;
 
-        this.trails = [];
+        this.trails = new Array(constants.trailLength);
         this.lastTrailPos = [this.x, this.y];
         this.trailing = true;
         this.accumulated = 0;
+        this.tIndex = 0;
 
         this.trailLines = [];
+
+        this.app = app;
     }
 
     updateTrail(gameTime) {
         this.accumulated += gameTime;
 
         if (this.trailing && this.accumulated >= constants.trailOn) {
-            this.trails.push([this.lastTrailPos, [this.x, this.y]]);
+            this.trails[this.tIndex] = {"from":this.lastTrailPos, "to":[this.x, this.y]};
             this.trailing = false;
 
             this.accumulated %= constants.trailOn;
+
+            this.tIndex += 1;
+            this.tIndex %= constants.trailLength;
         }
 
         else if (!this.trailing && this.accumulated >= constants.trailOff) {
@@ -47,30 +53,39 @@ export class Object {
 
             this.accumulated %= constants.trailOff;
         }
-
-        if (this.trails.length > 10) {
-            this.trails.shift();
-        }
     }
 
-    drawTrails(app, local) {
+    drawTrails(local) {
         this.trailLines.forEach((line) => {
             line.destroy();
         })
 
-        this.trailLines = [];
+        this.trailLines = []
 
-        this.trails.forEach((line) => {
+        let n = constants.trailLength;
+
+        const start = (this.tIndex == 0) ? (n - 1) : this.tIndex - 1;
+        console.log(start)
+
+        for (let i = start; i < (start + n); i++) {
+            console.log(i, this.trails);
+            let line = this.trails[i % n];
+
+            if (!line) continue;
+
             let newLine = new PIXI.Graphics();
-            newLine.alpha = 0.7;
-            app.stage.addChild(newLine);
 
-            newLine.moveTo(line[0][0] + local[0], line[0][1] + local[1]);
-            newLine.lineTo(line[1][0] + local[0], line[1][1] + local[1]);
+            newLine.alpha = 0.7;
+
+            newLine.moveTo(line.from[0] + local[0], line.from[1] + local[1]);
+            newLine.lineTo(line.to[0] + local[0], line.to[1] + local[1]);
             newLine.stroke({width: 3, color: 0xDDDDDD});
 
+            this.app.stage.addChild(newLine);
+
             this.trailLines.push(newLine);
-        })
+
+        }
     }
 
     checkCollision(object) {
