@@ -18,6 +18,7 @@ let local = [0, 0]
 let last = [0, 0]
 let dragTarget = null;
 let zoom = 1;
+let tooltipDragging = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousedown', (event) => {
@@ -30,14 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('mousemove', (event) => {
-        let flag = 0;
+        let flag = tooltipDragging;
 
         sliders.forEach((slider) => {
             if (slider.isDragging) {
                 flag = 1;
                 return;
             }
-        })
+        });
+
+        
 
         if (!mouseDown || dragTarget!=null || flag) return;
         
@@ -194,5 +197,7 @@ let newObject = {mass: 10, radius: 10};
         let returnObject = uni.updateObjects(time.deltaTime * (1 / 6), local, grid, zoom);
         dragTarget = returnObject.dragTarget;
         local = returnObject.local;
+        tooltipDragging = returnObject.tooltipDragging;
+
     });
 })();

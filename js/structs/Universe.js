@@ -94,7 +94,9 @@ export class Universe {
                 if (this.target == newObject) this.target = false;
                 else this.target = newObject;
             }
+
             newObject.lastClick = Date.now();
+            newObject.toggleSlider();
             this.onDragStart(newObject);
         });
 
@@ -208,6 +210,12 @@ export class Universe {
             local = [this.app.screen.width / 2 - this.target.x, this.app.screen.height / 2 - this.target.y];
         }
 
-        return {dragTarget: this.dragTarget, local: local};
+        let tooltipDragging = 0;
+        this.Objects.forEach((object) => {
+            if (object.tooltip == 'null') return;
+            if (object.tooltip.isDragging) tooltipDragging = 1;
+        })
+
+        return {dragTarget: this.dragTarget, local: local, tooltipDragging: tooltipDragging};
     }
 }

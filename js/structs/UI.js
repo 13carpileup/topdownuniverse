@@ -119,6 +119,12 @@ export class Slider {
     getValue() {
         return this.value;
     }
+
+    destroy() {
+        console.log("DESTRUCTION!");
+        this.track.destroy();
+        this.sliderContainer.destroy();
+    }
 }
 
 export class Button {

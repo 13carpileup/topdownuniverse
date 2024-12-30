@@ -1,4 +1,5 @@
 import { constants } from "../constants.js";
+import { Slider } from "./UI.js"
 
 export class Object {
     constructor(ref, radius, x, y, velocity, angle, mass, app) {
@@ -36,6 +37,9 @@ export class Object {
         this.app = app;
 
         this.zoom = 1;
+
+        this.sliderBool = 0;
+        this.tooltip = 'null';
     }
 
     updateTrail(gameTime) {
@@ -124,5 +128,34 @@ export class Object {
         let dist = (Math.sqrt((object.x - this.x) ** 2 + (object.y - this.y) ** 2));
         
         return collisionReq >= dist;
+    }
+
+    createSlider() {
+        this.tooltip = new Slider(this.app, {
+            x: 50,
+            y: 100,
+            width: 150,
+            min: -50,
+            max: 50,
+            value: this.vx,
+            div:  1,
+            onChange: (value) => {
+                this.vx = value;
+            },
+            description: "vx"
+        });
+    }
+
+    // ui
+    toggleSlider() {
+        if (this.slider) {
+            this.slider = 0;
+            this.tooltip.destroy();
+
+            return;
+        }
+
+        this.createSlider();
+        this.slider = 1;
     }
 }
