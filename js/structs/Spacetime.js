@@ -5,23 +5,26 @@ export class Spacetime {
         this.notFirst = 0;
         this.forceAdjustment = 10000;
         this.lines = new Map();
+
+        this.zoom = 1;
     }
 
     update(objects, local) {
-        this.drawLines(local[0] % this.density - 100, this.density, local[1] % this.density - 100, this.density, objects);
+        const zoomAdjusted = this.density * this.zoom;
+        this.drawLines(local[0] % zoomAdjusted - 100, zoomAdjusted, local[1] % zoomAdjusted - 100, zoomAdjusted, objects);
     }
 
     drawLines(xBegin, xDelta, yBegin, yDelta, objects) {
         let allPoints = [];
-        for (let x = xBegin; x < this.app.screen.width + 100; x += xDelta) {
+        for (let x = xBegin; x < (this.app.screen.width + 100); x += xDelta) {
             let points = [];
 
-            for (let y = yBegin; y < this.app.screen.height + 100; y += yDelta) {
+            for (let y = yBegin; y < (this.app.screen.height + 100); y += yDelta) {
                 let forces = [0, 0];
 
                 objects.forEach((object) => {
-                    let dx = x - object.ref.x;
-                    let dy = y - object.ref.y;
+                    let dx = (x - object.ref.x);
+                    let dy = (y - object.ref.y);
 
                     let distSquared = Math.max(dx ** 2 + dy ** 2, 0.001);
                     let force = (object.mass * this.forceAdjustment) / distSquared;

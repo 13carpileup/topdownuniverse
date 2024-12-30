@@ -29,15 +29,43 @@ export class Universe {
 
         this.target = false;
         this.tooltip = null;
+
+        this.zoom = 1;
+
+        this.app.stage.on('wheel', this.handleWheel.bind(this));
+
+    }
+
+    handleWheel(event) {
+        const scrollDirection = Math.sign(event.deltaY);
+        const zoomStep = constants.scrollSpeed; 
+    
+        if (scrollDirection < 0) {
+            this.zoom += zoomStep;
+        }
+
+        else if (scrollDirection > 0) {
+            this.zoom = Math.max(this.zoom - zoomStep, 0.3); 
+        }
+
+        this.Objects.forEach((object) => {
+            object.ref.scale.set(this.zoom);
+            object.zoom = this.zoom
+        });
+
+        this.Spacetime.zoom = this.zoom;
     }
     
 
     onDragMove(event) {
         if (this.dragTarget) {
+            console.log(this.zoom);
+
+
             this.dragTarget.ref.x = event.x;
             this.dragTarget.ref.y = event.y;
-            this.dragTarget.x = event.x - this.local[0]; 
-            this.dragTarget.y = event.y - this.local[1];
+            this.dragTarget.x = (event.x / this.zoom - this.local[0]); 
+            this.dragTarget.y = (event.y / this.zoom - this.local[1]);
 
             let deltaTime = Date.now() - this.dragTarget.lastDragTime;
             deltaTime = Math.max(deltaTime, 1);
@@ -177,8 +205,8 @@ export class Universe {
             object.x += (object.vx) * (gameTime);
             object.y += (object.vy) * (gameTime);
 
-            object.ref.x = object.x + local[0];
-            object.ref.y = object.y + local[1];
+            object.ref.x = (object.x + local[0]) * this.zoom;
+            object.ref.y = (object.y + local[1]) * this.zoom;
         });
 
         if (this.target) {

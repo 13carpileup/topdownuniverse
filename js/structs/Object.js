@@ -32,6 +32,8 @@ export class Object {
         this.trailLines = [];
 
         this.app = app;
+
+        this.zoom = 1;
     }
 
     updateTrail(gameTime) {
@@ -96,8 +98,8 @@ export class Object {
     drawTrail(start, end, alpha) {
         let newLine = new PIXI.Graphics();
 
-        newLine.moveTo(start[0], start[1]);
-        newLine.lineTo(end[0], end[1]);
+        newLine.moveTo(start[0] * this.zoom, start[1] * this.zoom);
+        newLine.lineTo(end[0] * this.zoom, end[1] * this.zoom);
         newLine.stroke({width: 3, color: 0xDDDDDD});
         newLine.alpha = alpha;
 
@@ -117,7 +119,7 @@ export class Object {
 
     checkCollision(object) {
         let collisionReq = (this.radius + object.radius);
-        let dist = (Math.sqrt((object.ref.x - this.ref.x) ** 2 + (object.ref.y - this.ref.y) ** 2));
+        let dist = (Math.sqrt((object.x - this.x) ** 2 + (object.y - this.y) ** 2));
         
         return collisionReq >= dist;
     }

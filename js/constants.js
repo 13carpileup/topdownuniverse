@@ -6,8 +6,11 @@ export const constants = {
     // trails
     trailOn: 20,
     trailOff: 40,
-    trailLength: 35,
+    trailLength: 15,
 
     // explosion
     collisionNumber: 6,
+
+    // scrolling
+    scrollSpeed: 0.007,
 }
