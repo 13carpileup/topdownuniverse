@@ -70,10 +70,7 @@ export class Object {
 
         for (let i = start; i < (start + n); i++) {
             let line = this.trails[i % n];
-
             if (!line) continue;
-
-            let newLine = new PIXI.Graphics();
 
             let add = 0;
             if (this.trailing) {
@@ -81,30 +78,28 @@ export class Object {
                 add -= dist / constants.trailOn;
             }
 
+            let newAlpha = ((i - start + n - 1) % n + add) / n;
 
-            newLine.alpha = ((i - start + n - 1) % n + add) / n;
-
-            newLine.moveTo(line.from[0] + local[0], line.from[1] + local[1]);
-            newLine.lineTo(line.to[0] + local[0], line.to[1] + local[1]);
-            newLine.stroke({width: 3, color: 0xDDDDDD});
-
-            this.app.stage.addChild(newLine);
-
-            this.trailLines.push(newLine);
+            this.drawTrail([line.from[0] + local[0], line.from[1] + local[1]], [line.to[0] + local[0], line.to[1] + local[1]], newAlpha)
         }
 
         if (this.trailing) {
-
-            let newLine = new PIXI.Graphics();
-
-            newLine.moveTo(this.lastTrailPos[0] + local[0], this.lastTrailPos[1] + local[1]);
-            newLine.lineTo(this.x + local[0], this.y + local[1]);
-            newLine.stroke({width: 3, color: 0xDDDDDD});
-
-            this.app.stage.addChild(newLine);
-
-            this.trailLines.push(newLine);
+            this.drawTrail([this.lastTrailPos[0] + local[0], this.lastTrailPos[1] + local[1]], [this.x + local[0], this.y + local[1]], 1)
         }
+    }
+
+    drawTrail(start, end, alpha) {
+        let newLine = new PIXI.Graphics();
+
+        newLine.moveTo(start[0], start[1]);
+        newLine.lineTo(end[0], end[1]);
+        newLine.stroke({width: 3, color: 0xDDDDDD});
+        newLine.alpha = alpha;
+
+        newLine.zIndex = -1;
+
+        this.app.stage.addChild(newLine);
+        this.trailLines.push(newLine);
     }
 
     destroy() {

@@ -131,15 +131,17 @@ export class Universe {
                             object1.vy = newVy;
                             object1.mass += object2.mass;
                         }
-
-
-                        // object1.vx = (object1.vx * object1.mass + object2.vx * object2.mass) / (object1.mass + object2.mass);
-                        // object1.vy = (object1.vy * object1.mass + object2.vy * object2.mass) / (object1.mass + object2.mass);
-
-                        // object1.mass += object2.mass;
                         
                         //todo: collision splits
                         //this.addObject(object2.x + object2.radius + 10, object2.y + object2.radius + 10, object2.radius / 4, object1.velocity, -object1.angle, object2.mass / 4);
+                        const n = constants.collisionNumber;
+                        
+                        const newRadius = object2.radius / n;
+                        const newMass = object2.mass / n;
+
+                        for (let i = 0; i < n; i++) {
+                            const angle = Math.PI * (2 * i / n - 1);
+                        }
 
                         object2.destroy();
                         this.Objects.splice(this.Objects.indexOf(object2), 1);

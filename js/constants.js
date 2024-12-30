@@ -5,6 +5,9 @@ export const constants = {
 
     // trails
     trailOn: 20,
-    trailOff: 20,
+    trailOff: 40,
     trailLength: 35,
+
+    // explosion
+    collisionNumber: 6,
 }
