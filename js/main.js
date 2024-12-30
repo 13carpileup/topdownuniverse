@@ -65,8 +65,8 @@ function handleWheel(event, app) {
 
     const middle = [- event.x + newWidth / 2, - event.y + newHeight / 2];
 
-    const weightedx = (local[0] * 39 + middle[0]) / 40;
-    const weightedy = (local[1] * 39 + middle[1]) / 40;
+    const weightedx = (local[0] * 29 + middle[0]) / 30;
+    const weightedy = (local[1] * 29 + middle[1]) / 30;
 
     local = [weightedx, weightedy];
 };
