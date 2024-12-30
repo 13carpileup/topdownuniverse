@@ -29,6 +29,8 @@ export class Object {
         this.trailing = true;
         this.tIndex = 1;
 
+        this.asteroid = false;
+
         this.trailLines = [];
 
         this.app = app;

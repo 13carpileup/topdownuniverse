@@ -9,7 +9,7 @@ export const constants = {
     trailLength: 15,
 
     // explosion
-    collisionNumber: 6,
+    collisionNumber: 5,
 
     // scrolling
     scrollSpeed: 0.007,

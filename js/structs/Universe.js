@@ -73,7 +73,7 @@ export class Universe {
     }
 
 
-    addObject(x, y, radius, velocity, angle, mass, button) {
+    addObject(x, y, radius, velocity, angle, mass, button, asteroid = false) {
         const gr = new PIXI.Graphics();
         gr.beginFill(0xffffff);
         gr.drawCircle(0, 0, radius);
@@ -87,6 +87,7 @@ export class Universe {
         this.app.stage.addChild(gr);
     
         let newObject = new Object(gr, radius, x, y, velocity, angle, mass, this.app);
+        newObject.asteroid = asteroid;
         
         newObject.ref.on('pointerdown', (event) => {
             if ((Date.now() - newObject.lastClick) < 300) {
@@ -134,7 +135,7 @@ export class Universe {
             this.Objects.forEach((object2) => {
                 if (object1 == object2) return;
 
-                if (object1.checkCollision(object2)) {
+                if (object1.checkCollision(object2) && !object2.dragging) {
                     //console.log("COLLISION!")
                     if (object1.mass >= object2.mass) {
                         //conservation of momentum
@@ -148,14 +149,22 @@ export class Universe {
                         }
                         
                         //todo: collision splits
-                        //this.addObject(object2.x + object2.radius + 10, object2.y + object2.radius + 10, object2.radius / 4, object1.velocity, -object1.angle, object2.mass / 4);
-                        const n = constants.collisionNumber;
-                        
-                        const newRadius = object2.radius / n;
-                        const newMass = object2.mass / n;
+                        if (!object2.asteroid) {
+                            const n = constants.collisionNumber;
+                            
+                            const newRadius = object2.radius / n;
+                            const newMass = object2.mass / n;
 
-                        for (let i = 0; i < n; i++) {
-                            const angle = Math.PI * (2 * i / n - 1);
+                            for (let i = 0; i < n; i++) {
+                                const angle = Math.PI * (2 * i / n - 1);
+
+                                const dx = Math.cos(angle) * (object2.radius * 1.2);
+                                const dy = Math.sin(angle) * (object2.radius * 1.2);
+
+                                const newVelocity = Math.sqrt(object2.vx ** 2 + object2.vy ** 2)
+
+                                this.addObject(object2.x + dx, object2.y + dy, newRadius, newVelocity, angle, newMass, false, true);
+                            }
                         }
 
                         object2.destroy();
