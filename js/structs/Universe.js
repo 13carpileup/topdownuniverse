@@ -110,6 +110,7 @@ export class Universe {
         this.local = local;
         console.log("UPDATE: ", this.zoom);
 
+        if (this.zoom != zoom) this.Spacetime.clear();
         this.zoom = zoom;
         this.Spacetime.zoom = zoom;
 
