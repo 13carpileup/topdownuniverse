@@ -35,6 +35,11 @@ export class Object {
     }
 
     updateTrail(gameTime) {
+        if (this.dragging) {
+            this.trailing = false;
+            return;
+        }
+
         let n = constants.trailLength;
         let dIndex = (this.tIndex - 1 + n) % n;
         let fromDist = Math.sqrt((this.trails[dIndex].to[0] - this.x) ** 2 + (this.trails[dIndex].to[1] - this.y) ** 2); 
@@ -83,7 +88,7 @@ export class Object {
             this.drawTrail([line.from[0] + local[0], line.from[1] + local[1]], [line.to[0] + local[0], line.to[1] + local[1]], newAlpha)
         }
 
-        if (this.trailing) {
+        if (this.trailing && !this.dragging) {
             this.drawTrail([this.lastTrailPos[0] + local[0], this.lastTrailPos[1] + local[1]], [this.x + local[0], this.y + local[1]], 1)
         }
     }

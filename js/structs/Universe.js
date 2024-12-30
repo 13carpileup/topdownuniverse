@@ -51,6 +51,8 @@ export class Universe {
     }
 
     onDragStart(object) {
+        if (this.target == object) return;
+        
         this.dragTarget = object;
         this.app.stage.on('pointermove', this.onDragMove);
         object.dragging = 1;
