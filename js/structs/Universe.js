@@ -31,31 +31,7 @@ export class Universe {
         this.tooltip = null;
 
         this.zoom = 1;
-
-        this.app.stage.on('wheel', this.handleWheel.bind(this));
-
     }
-
-    handleWheel(event) {
-        const scrollDirection = Math.sign(event.deltaY);
-        const zoomStep = constants.scrollSpeed; 
-    
-        if (scrollDirection < 0) {
-            this.zoom += zoomStep;
-        }
-
-        else if (scrollDirection > 0) {
-            this.zoom = Math.max(this.zoom - zoomStep, 0.3); 
-        }
-
-        this.Objects.forEach((object) => {
-            object.ref.scale.set(this.zoom);
-            object.zoom = this.zoom
-        });
-
-        this.Spacetime.zoom = this.zoom;
-    }
-    
 
     onDragMove(event) {
         if (this.dragTarget) {
@@ -129,8 +105,17 @@ export class Universe {
         this.Objects.push(newObject);
     }
 
-    updateObjects(gameTime, local, grid) {
+    updateObjects(gameTime, local, grid, zoom) {
         this.local = local;
+        console.log("UPDATE: ", this.zoom);
+
+        this.zoom = zoom;
+        this.Spacetime.zoom = zoom;
+
+        this.Objects.forEach((object) => {
+            object.ref.scale.set(zoom);
+            object.zoom = this.zoom
+        });
 
         if (grid) this.Spacetime.update(this.Objects, local);
         else this.Spacetime.clear();

@@ -2,6 +2,7 @@ import { Object } from './structs/Object.js'
 import { Universe } from './structs/Universe.js';
 import { Slider, Button } from './structs/UI.js';
 import { showControlsPopup, createControlsPopup, handleResize } from './util.js';
+import { constants } from './constants.js';
 
 // controls on first visit
 const hasVisited = localStorage.getItem('hasVisitedBefore');
@@ -16,6 +17,7 @@ let mouseDown = false;
 let local = [0, 0]
 let last = [0, 0]
 let dragTarget = null;
+let zoom = 1;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousedown', (event) => {
@@ -44,6 +46,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }); 
 });
 
+
+function handleWheel(event, app) {
+    console.log(event.x, event.y);
+    const scrollDirection = Math.sign(event.deltaY);
+    const zoomStep = constants.scrollSpeed; 
+
+    if (scrollDirection < 0) {
+        zoom += zoomStep;
+    }
+
+    else if (scrollDirection > 0) {
+        zoom = Math.max(zoom - zoomStep, 0.3); 
+    }
+
+    const newWidth = app.screen.width / zoom;
+    const newHeight = app.screen.height / zoom;
+
+    const middle = [- event.x + newWidth / 2, - event.y + newHeight / 2];
+
+    const weightedx = (local[0] * 39 + middle[0]) / 40;
+    const weightedy = (local[1] * 39 + middle[1]) / 40;
+
+    local = [weightedx, weightedy];
+};
+
 let gravityAmp = 1;
 let sliders = [];
 let newObject = {mass: 10, radius: 10};
@@ -59,6 +86,7 @@ let newObject = {mass: 10, radius: 10};
     // initialize the UNIVERSE!
 
     let uni = new Universe(app);
+    app.stage.on('wheel', (() => {handleWheel(event, app)}).bind(this));
     
     // app
     uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 4.08, 0, 1);
@@ -163,7 +191,7 @@ let newObject = {mass: 10, radius: 10};
     document.body.appendChild(app.canvas);
     app.ticker.add((time) =>
     {
-        let returnObject = uni.updateObjects(time.deltaTime * (1 / 6), local, grid);
+        let returnObject = uni.updateObjects(time.deltaTime * (1 / 6), local, grid, zoom);
         dragTarget = returnObject.dragTarget;
         local = returnObject.local;
     });
