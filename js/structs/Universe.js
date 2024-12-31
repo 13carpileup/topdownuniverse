@@ -21,7 +21,6 @@ export class Universe {
         this.app.stage.on('pointerupoutside', this.onDragEnd);
 
         this.GravAmplification = constants.gravitationalConstant;
-        this.FlingAmplification = constants.flingAmplification;
 
         this.buttonPressed = false;
 
@@ -42,15 +41,6 @@ export class Universe {
             this.dragTarget.ref.y = event.y;
             this.dragTarget.x = (event.x / this.zoom - this.local[0]); 
             this.dragTarget.y = (event.y / this.zoom - this.local[1]);
-
-            let deltaTime = Date.now() - this.dragTarget.lastDragTime;
-            deltaTime = Math.max(deltaTime, 1);
-            
-            this.dragTarget.vx = (event.x - this.dragTarget.lastPos[0]) / deltaTime * this.FlingAmplification;
-            this.dragTarget.vy = (event.y - this.dragTarget.lastPos[1]) / deltaTime * this.FlingAmplification; 
-
-            this.dragTarget.lastDragTime = Date.now();
-            this.dragTarget.lastPos = [event.x, event.y];
         }
     }
 
