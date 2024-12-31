@@ -41,6 +41,7 @@ export class Universe {
             this.dragTarget.ref.y = event.y;
             this.dragTarget.x = (event.x / this.zoom - this.local[0]); 
             this.dragTarget.y = (event.y / this.zoom - this.local[1]);
+
         }
     }
 

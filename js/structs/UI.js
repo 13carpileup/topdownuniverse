@@ -83,12 +83,10 @@ export class Slider {
 
         this.value /= this.options.div;
 
-        this.updateValue()
+        this.updateVal()
     }
 
-    updateValue(value = false) {
-        if (value) this.value = value;
-
+    updateVal() {
         if (this.options.log) {
             this.value = 10 ** (this.value);
             this.value = Math.round(this.value);
@@ -99,6 +97,21 @@ export class Slider {
         if (typeof this.options.onChange === 'function') {
             this.options.onChange(this.value);
         }
+
+        console.log("UPDATE", this.value);
+    }
+
+    updateValue(value) {
+        if (this.isDragging) return
+
+        this.value = value;
+
+        if (this.options.log) {
+            this.value = 10 ** (this.value);
+            this.value = Math.round(this.value);
+        }
+
+        this.label.text = `${this.options.description} : ${this.value}`;
     }
 
 
