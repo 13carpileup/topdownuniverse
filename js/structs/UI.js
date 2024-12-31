@@ -92,6 +92,8 @@ export class Slider {
             this.value = Math.round(this.value);
         }
 
+
+
         this.label.text = `${this.options.description} : ${this.value}`;
 
         if (typeof this.options.onChange === 'function') {
@@ -104,7 +106,10 @@ export class Slider {
     updateValue(value) {
         if (this.isDragging) return
 
-        this.value = value;
+        this.value = Math.round(value * 100) / 100;
+
+        const clampedX = Math.max(0, Math.min(this.options.width, value));
+        this.handle.x = clampedX;
 
         if (this.options.log) {
             this.value = 10 ** (this.value);

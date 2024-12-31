@@ -140,26 +140,21 @@ export class Object {
             y: 100,
             width: 150,
             min: 0,
-            max: 10000,
+            max: 5000,
             value: Math.sqrt(this.vx ** 2 + this.vy ** 2),
             div:  100,
             onChange: (value) => {
-                console.log(value, this.vx, this.vy, this.angle);
-                if (Math.abs(value) < 0.1 || (this.vx / value) > 1) {
+                if (Math.abs(value) < 0.1) {
+                    console.log('ruh roh')
                     this.vx = 0;
                     this.vy = 0;
-
                     return;
                 }
-
-                console.log("PRECOMP",this.vx / value)
-
-                this.angle = Math.acos(this.vx / value);
-
+                        
+                this.angle = Math.atan2(this.vy, this.vx);
+            
                 this.vx = Math.cos(this.angle) * value;
                 this.vy = Math.sin(this.angle) * value;
-
-                
             },
             description: "Velocity"
         });
