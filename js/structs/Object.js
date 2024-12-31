@@ -118,6 +118,10 @@ export class Object {
     destroy() {
         this.ref.destroy();
 
+        if (this.tooltip != 'null') {
+            this.tooltip.destroy();
+        }
+
         this.trailLines.forEach((trail) => {
             trail.destroy();
         })
@@ -135,14 +139,29 @@ export class Object {
             x: 50,
             y: 100,
             width: 150,
-            min: -50,
-            max: 50,
-            value: this.vx,
-            div:  1,
+            min: 0,
+            max: 10000,
+            value: Math.sqrt(this.vx ** 2 + this.vy ** 2),
+            div:  100,
             onChange: (value) => {
-                this.vx = value;
+                console.log(value, this.vx, this.vy, this.angle);
+                if (Math.abs(value) < 0.1 || (this.vx / value) > 1) {
+                    this.vx = 0;
+                    this.vy = 0;
+
+                    return;
+                }
+
+                console.log("PRECOMP",this.vx / value)
+
+                this.angle = Math.acos(this.vx / value);
+
+                this.vx = Math.cos(this.angle) * value;
+                this.vy = Math.sin(this.angle) * value;
+
+                
             },
-            description: "vx"
+            description: "Velocity"
         });
     }
 
@@ -158,4 +177,11 @@ export class Object {
         this.createSlider();
         this.slider = 1;
     }
+
+    update() {
+        if (this.tooltip != 'null') {
+            this.tooltip.updateValue(Math.sqrt(this.vx ** 2 + this.vy ** 2))
+        }
+    }
+
 }

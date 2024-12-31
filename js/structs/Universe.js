@@ -110,7 +110,6 @@ export class Universe {
 
     updateObjects(gameTime, local, grid, zoom) {
         this.local = local;
-        console.log("UPDATE: ", this.zoom);
 
         if (this.zoom != zoom) this.Spacetime.clear();
         this.zoom = zoom;
@@ -212,6 +211,8 @@ export class Universe {
 
         let tooltipDragging = 0;
         this.Objects.forEach((object) => {
+            object.update();
+
             if (object.tooltip == 'null') return;
             if (object.tooltip.isDragging) tooltipDragging = 1;
         })

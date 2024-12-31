@@ -194,7 +194,7 @@ let newObject = {mass: 10, radius: 10};
     document.body.appendChild(app.canvas);
     app.ticker.add((time) =>
     {
-        let returnObject = uni.updateObjects(time.deltaTime * (1 / 6), local, grid, zoom);
+        let returnObject = uni.updateObjects(time.deltaTime * gravityAmp * (1 / 6), local, grid, zoom);
         dragTarget = returnObject.dragTarget;
         local = returnObject.local;
         tooltipDragging = returnObject.tooltipDragging;
