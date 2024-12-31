@@ -92,15 +92,11 @@ export class Slider {
             this.value = Math.round(this.value);
         }
 
-
-
         this.label.text = `${this.options.description} : ${this.value}`;
 
         if (typeof this.options.onChange === 'function') {
             this.options.onChange(this.value);
         }
-
-        console.log("UPDATE", this.value);
     }
 
     updateValue(value) {
@@ -108,8 +104,8 @@ export class Slider {
 
         this.value = Math.round(value * 100) / 100;
 
-        const clampedX = Math.max(0, Math.min(this.options.width, value));
-        this.handle.x = clampedX;
+        this.handle.x = (this.value / this.options.max / this.options.div) * this.options.width * 100 * 100;
+        console.log(this.handle.x)
 
         if (this.options.log) {
             this.value = 10 ** (this.value);
@@ -144,7 +140,6 @@ export class Slider {
     }
 
     destroy() {
-        console.log("DESTRUCTION!");
         this.track.destroy();
         this.sliderContainer.destroy();
     }
@@ -184,7 +179,6 @@ export class Button {
                 
         this.container.on('pointerdown', () => {
             if (typeof this.options.onClick === 'function') {
-                console.log('yellow');
                 this.options.onClick();
             }
         });
