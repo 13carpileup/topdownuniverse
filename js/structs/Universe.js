@@ -203,7 +203,7 @@ export class Universe {
         this.Objects.forEach((object) => {
             object.update();
 
-            if (object.tooltip == 'null') {
+            if (!object.sliderBool) {
                 return
             };
 
@@ -211,15 +211,18 @@ export class Universe {
                 maxTime = Math.max(maxTime, object.tooltipTime);
             }
 
-            if (object.tooltip.isDragging) {
-                tooltipDragging = 1;
-            }
+            object.tooltipList.forEach((tooltip) => {
+                if (tooltip.isDragging) {
+                    tooltipDragging = 1;
+                }
+            });
+
         });
 
         this.Objects.forEach((object) => {
             //console.log("mt", maxTime);
 
-            if (object.tooltip != 'null' && object.tooltipTime != maxTime && object.sliderBool) {
+            if (object.tooltipTime != maxTime && object.sliderBool) {
                 object.toggleSlider();
             }
         })

@@ -38,6 +38,7 @@ export class Object {
 
         this.zoom = 1;
 
+        this.tooltipList = [];
         this.sliderBool = 0;
         this.tooltip = 'null';
         this.tooltipTime = 0;
@@ -136,11 +137,9 @@ export class Object {
     }
 
     createSlider() {
-        console.log('hi!');
         this.tooltipTime = Date.now();
-        console.log("CREATING:", this.tooltipTime);
 
-        this.tooltip = new Slider(this.app, {
+        let tooltip = new Slider(this.app, {
             x: 50,
             y: 100,
             width: 150,
@@ -150,7 +149,6 @@ export class Object {
             div:  100,
             onChange: (value) => {
                 if (Math.abs(value) < 0.1) {
-                    console.log('ruh roh')
                     this.vx = 0;
                     this.vy = 0;
                     return;
@@ -163,13 +161,35 @@ export class Object {
             },
             description: "Velocity"
         });
+
+        this.tooltipList.push(tooltip);
+
+        tooltip = new Slider(this.app, {
+            x: 50,
+            y: 150,
+            width: 150,
+            min: -Math.PI * 100,
+            max: Math.PI * 100,
+            value: Math.sqrt(this.vx ** 2 + this.vy ** 2),
+            div:  100,
+            onChange: (value) => {
+                this.angle = Math.atan2(this.vy, this.vx);
+                console.log(this.angle);
+            },
+            description: "Angle (rads)"
+        });
+
+        this.tooltipList.push(tooltip);
     }
 
     // ui
     toggleSlider() {
         if (this.sliderBool) {
-            this.sliderBool = 0;
-            this.tooltip.destroy();
+            this.tooltipList.forEach((tooltip) => {
+                tooltip.destroy();
+            })
+            
+            this.sliderBool = 0;            
 
             return;
         }
@@ -179,8 +199,9 @@ export class Object {
     }
 
     update() {
-        if (this.tooltip != 'null') {
-            this.tooltip.updateValue(Math.sqrt(this.vx ** 2 + this.vy ** 2))
+        if (this.sliderBool) {
+            this.tooltipList[0].updateValue(Math.sqrt(this.vx ** 2 + this.vy ** 2));
+            this.tooltipList[1].updateValue(Math.atan2(this.vy, this.vx));
         }
     }
 

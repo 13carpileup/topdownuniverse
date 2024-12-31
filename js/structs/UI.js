@@ -104,8 +104,7 @@ export class Slider {
 
         this.value = Math.round(value * 100) / 100;
 
-        this.handle.x = (this.value / this.options.max / this.options.div) * this.options.width * 100 * 100;
-        console.log(this.handle.x)
+        this.handle.x = ((this.value - this.options.min / this.options.div) / (this.options.max - this.options.min)) * this.options.width * this.options.div;
 
         if (this.options.log) {
             this.value = 10 ** (this.value);
