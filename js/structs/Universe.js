@@ -34,9 +34,7 @@ export class Universe {
 
     onDragMove(event) {
         if (this.dragTarget) {
-            console.log(this.zoom);
-
-
+            //console.log(this.zoom);
             this.dragTarget.ref.x = event.x;
             this.dragTarget.ref.y = event.y;
             this.dragTarget.x = (event.x / this.zoom - this.local[0]); 
@@ -201,13 +199,31 @@ export class Universe {
         }
 
         let tooltipDragging = 0;
+        let maxTime = 0;
         this.Objects.forEach((object) => {
             object.update();
 
-            if (object.tooltip == 'null') return;
-            if (object.tooltip.isDragging) tooltipDragging = 1;
-        })
+            if (object.tooltip == 'null') {
+                return
+            };
 
+            if (object.sliderBool) {
+                maxTime = Math.max(maxTime, object.tooltipTime);
+            }
+
+            if (object.tooltip.isDragging) {
+                tooltipDragging = 1;
+            }
+        });
+
+        this.Objects.forEach((object) => {
+            //console.log("mt", maxTime);
+
+            if (object.tooltip != 'null' && object.tooltipTime != maxTime && object.sliderBool) {
+                object.toggleSlider();
+            }
+        })
+        
         return {dragTarget: this.dragTarget, local: local, tooltipDragging: tooltipDragging};
     }
 }

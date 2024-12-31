@@ -40,6 +40,7 @@ export class Object {
 
         this.sliderBool = 0;
         this.tooltip = 'null';
+        this.tooltipTime = 0;
     }
 
     updateTrail(gameTime) {
@@ -135,6 +136,10 @@ export class Object {
     }
 
     createSlider() {
+        console.log('hi!');
+        this.tooltipTime = Date.now();
+        console.log("CREATING:", this.tooltipTime);
+
         this.tooltip = new Slider(this.app, {
             x: 50,
             y: 100,
@@ -162,15 +167,15 @@ export class Object {
 
     // ui
     toggleSlider() {
-        if (this.slider) {
-            this.slider = 0;
+        if (this.sliderBool) {
+            this.sliderBool = 0;
             this.tooltip.destroy();
 
             return;
         }
 
         this.createSlider();
-        this.slider = 1;
+        this.sliderBool = 1;
     }
 
     update() {
