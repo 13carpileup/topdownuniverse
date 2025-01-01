@@ -195,7 +195,7 @@ export class Universe {
         });
 
         if (this.target) {
-            local = [this.app.screen.width / 2 - this.target.x, this.app.screen.height / 2 - this.target.y];
+            local = [this.app.screen.width / 2 / this.zoom - this.target.x, this.app.screen.height / 2 / this.zoom - this.target.y];
         }
 
         let tooltipDragging = 0;
