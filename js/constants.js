@@ -12,5 +12,5 @@ export const constants = {
     collisionNumber: 5,
 
     // scrolling
-    scrollSpeed: 0.007,
+    scrollSpeed: 0.015,
 }

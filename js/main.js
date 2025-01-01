@@ -40,8 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        
-
         if (!mouseDown || dragTarget!=null || flag) return;
         
         local = [local[0] + (event.clientX - last[0]) / zoom, local[1] + (event.clientY - last[1]) / zoom];
@@ -60,6 +58,7 @@ function handleWheel(event, app) {
     }
 
     else if (scrollDirection > 0) {
+        if (zoom == 0.3) return;
         zoom = Math.max(zoom - zoomStep, 0.3); 
     }
 
