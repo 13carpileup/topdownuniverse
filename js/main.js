@@ -73,15 +73,18 @@ function handleWheel(event, app) {
         zoom = Math.max(zoom - zoomStep, 0.3); 
     }
 
-    const newWidth = app.screen.width / zoom;
-    const newHeight = app.screen.height / zoom;
+    const newWidth = app.screen.width / (1 + zoomStep);
+    const newHeight = app.screen.height / (1 + zoomStep);
 
-    const middle = [- event.x + newWidth / 2, - event.y + newHeight / 2];
+    const middle = [event.x - newWidth / 2, event.y - newHeight / 2];
 
-    const weightedx = (local[0] * 29 + middle[0]) / 30;
-    const weightedy = (local[1] * 29 + middle[1]) / 30;
+    const centered = [local[0] - middle[0], local[1] - middle[1]];
 
-    local = [weightedx, weightedy];
+    const weightingSize = 20;
+    local[0] = (centered[0] + local[0] * (weightingSize - 1)) / (weightingSize);
+    local[1] = (centered[1] + local[1] * (weightingSize - 1)) / (weightingSize);
+    
+    console.log(local);
 };
 
 let gravityAmp = 1;
