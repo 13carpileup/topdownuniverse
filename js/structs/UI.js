@@ -150,6 +150,7 @@ export class Button {
             x: 0,
             y: 0,
             description: "Error!",
+            descriptionToggle: "null",
             onClick: null,
             ...options,
         }
@@ -170,13 +171,19 @@ export class Button {
             align: 'center',
         });
 
-        this.label.x = 13;
-        this.label.y = 13;
+        this.label.anchor.set(0.5);
+        this.label.x = this.options.width / 2;
+        this.label.y = this.options.height / 2;
         
         this.container.addChild(this.background);
         this.container.addChild(this.label);
                 
         this.container.on('pointerdown', () => {
+            if (this.options.descriptionToggle != null) {
+                if (this.label.text == this.options.descriptionToggle) this.label.text = this.options.description;
+                else this.label.text = this.options.descriptionToggle;
+            }
+
             if (typeof this.options.onClick === 'function') {
                 this.options.onClick();
             }

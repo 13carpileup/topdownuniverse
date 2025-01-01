@@ -3,6 +3,7 @@ import { Universe } from './structs/Universe.js';
 import { Slider, Button } from './structs/UI.js';
 import { showControlsPopup, createControlsPopup, handleResize } from './util.js';
 import { constants } from './constants.js';
+import { Settings } from './structs/Settings.js';
 
 // controls on first visit
 const hasVisited = localStorage.getItem('hasVisitedBefore');
@@ -13,13 +14,15 @@ if (!hasVisited) {
     }, 500);
 }
 
+// globals
 let mouseDown = false;
 let local = [0, 0]
 let last = [0, 0]
 let dragTarget = null;
 let zoom = 1;
 let tooltipDragging = false;
-let grid = 0;
+let settings;
+let pause = 1;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousedown', (event) => {
@@ -88,26 +91,13 @@ let newObject = {mass: 10, radius: 10};
 
     // initialize the UNIVERSE!
 
+    settings = new Settings(app);
     let uni = new Universe(app);
     app.stage.on('wheel', (() => {handleWheel(event, app)}).bind(this));
     
     // app
     uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 4.08, 0, 1);
     uni.addObject(app.screen.width / 2, app.screen.height / 2, 130, 0, 0, 10000);
-
-    sliders.push(new Slider(app, {
-        x: 50,
-        y: app.screen.height - 100,
-        width: 150,
-        min: 0,
-        max: 100,
-        value: 10,
-        div:  10,
-        onChange: (value) => {
-            gravityAmp = value;
-        },
-        description: "Simulation Speed: "
-    }));
 
     sliders.push(new Slider(app, {
         x: 250,
@@ -140,6 +130,20 @@ let newObject = {mass: 10, radius: 10};
     
     let buttons = []
 
+    const b0 = new Button(app,
+        {
+            x: 50,
+            y: app.screen.height - 100,
+            width: 150,
+            height: 50,
+            description: "Pause",
+            descriptionToggle: "Unpause",
+            onClick: () => {
+                pause = !pause;
+            }
+        }
+    )
+
     const b1 = new Button(app,
         {
             x: 650,
@@ -155,18 +159,24 @@ let newObject = {mass: 10, radius: 10};
 
     buttons.push(b1);
 
-    const b2 = new Button(app,
-        {
-            x: buttons[buttons.length - 1].options.x + buttons[buttons.length - 1].options.width + 30,
-            y: app.screen.height - 100,
-            width: 130,
-            height: 50,
-            description: "Toggle Grid",
-            onClick: () => {
-                grid = !grid;
-            }
+    const b2 = new Button(app, {
+        x: buttons[buttons.length - 1].options.x + buttons[buttons.length - 1].options.width + 30,
+        y: app.screen.height - 100,
+        width: 130,
+        height: 50,
+        description: "Settings",
+        onClick: () => {
+            settings.toggle();
         }
-    )
+    });
+
+    window.addEventListener('resize', () => {
+        handleResize(app, sliders, buttons);
+        settings.handleResize();
+    });
+
+    window.gravityAmp = 1;
+    window.grid = false;
 
     buttons.push(b2);
 
@@ -192,7 +202,7 @@ let newObject = {mass: 10, radius: 10};
     document.body.appendChild(app.canvas);
     app.ticker.add((time) =>
     {
-        let returnObject = uni.updateObjects(time.deltaTime * gravityAmp * (1 / 6), local, grid, zoom);
+        let returnObject = uni.updateObjects(time.deltaTime * window.gravityAmp * (1 / 6) * pause, local, zoom);
         dragTarget = returnObject.dragTarget;
         local = returnObject.local;
         tooltipDragging = returnObject.tooltipDragging;

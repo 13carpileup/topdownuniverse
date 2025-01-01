@@ -97,7 +97,7 @@ export class Universe {
         this.Objects.push(newObject);
     }
 
-    updateObjects(gameTime, local, grid, zoom) {
+    updateObjects(gameTime, local, zoom) {
         this.local = local;
 
         if (this.zoom != zoom) this.Spacetime.clear();
@@ -109,7 +109,7 @@ export class Universe {
             object.zoom = this.zoom
         });
 
-        if (grid) this.Spacetime.update(this.Objects, local);
+        if (window.grid) this.Spacetime.update(this.Objects, local);
         else this.Spacetime.clear();
 
         // reset forces
