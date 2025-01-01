@@ -150,7 +150,7 @@ export class Button {
             x: 0,
             y: 0,
             description: "Error!",
-            descriptionToggle: "null",
+            descriptionToggle: null,
             onClick: null,
             ...options,
         }
