@@ -151,7 +151,7 @@ export class Object {
             y: 100,
             width: 150,
             min: 0,
-            max: 1000,
+            max: 2000,
             value: Math.sqrt(this.vx ** 2 + this.vy ** 2),
             div:  100,
             onChange: (value) => {
