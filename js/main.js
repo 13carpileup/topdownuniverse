@@ -19,6 +19,7 @@ let last = [0, 0]
 let dragTarget = null;
 let zoom = 1;
 let tooltipDragging = false;
+let grid = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousedown', (event) => {
@@ -153,8 +154,6 @@ let newObject = {mass: 10, radius: 10};
     )
 
     buttons.push(b1);
-
-    let grid = 1
 
     const b2 = new Button(app,
         {
