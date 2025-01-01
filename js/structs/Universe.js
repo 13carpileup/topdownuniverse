@@ -115,7 +115,7 @@ export class Universe {
         // reset forces
         this.Objects.forEach((object) => {
             object.updateTrail(gameTime);
-            object.drawTrails(local);
+            object.drawTrails(local, this.zoom);
 
             object.fx = 0;
             object.fy = 0;
@@ -190,8 +190,8 @@ export class Universe {
             object.x += (object.vx) * (gameTime);
             object.y += (object.vy) * (gameTime);
 
-            object.ref.x = (object.x + local[0]) * this.zoom;
-            object.ref.y = (object.y + local[1]) * this.zoom;
+            object.ref.x = (object.x + local[0]) * zoom;
+            object.ref.y = (object.y + local[1]) * zoom;
         });
 
         if (this.target) {

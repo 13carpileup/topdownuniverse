@@ -72,7 +72,7 @@ export class Object {
 
     }
 
-    drawTrails(local) {
+    drawTrails(local, zoom) {
         this.trailLines.forEach((line) => {
             line.destroy();
         })

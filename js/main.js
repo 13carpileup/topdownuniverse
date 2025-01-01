@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!mouseDown || dragTarget!=null || flag) return;
         
-        local = [local[0] + event.clientX - last[0], local[1] + event.clientY - last[1]];
+        local = [local[0] + (event.clientX - last[0]) / zoom, local[1] + (event.clientY - last[1]) / zoom];
         last = [event.clientX, event.clientY];
     }); 
 });
