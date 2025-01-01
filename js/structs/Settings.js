@@ -57,7 +57,7 @@ export class Settings {
             width: 240,
             min: 0,
             max: 100,
-            value: 10,
+            value: 1,
             div: 10,
             onChange: (value) => {
                 window.gravityAmp = value;

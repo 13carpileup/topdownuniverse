@@ -43,7 +43,8 @@ export class Object {
         this.tooltip = 'null';
         this.tooltipTime = 0;
 
-        this.line = new PIXI.Graphics();
+        this.vLine = new PIXI.Graphics();
+        this.app.stage.addChild(this.vLine);
     }
 
     updateTrail(gameTime) {
@@ -183,6 +184,23 @@ export class Object {
         });
 
         this.tooltipList.push(tooltip);
+
+        tooltip = new Slider(this.app, {
+            x: 50,
+            y: 200,
+            width: 150,
+            min: 1,
+            max: 500,
+            value: this.mass,
+            div:  100,
+            log: true,
+            onChange: (value) => {
+                this.mass = value;
+            },
+            description: "Mass"
+        });
+
+        this.tooltipList.push(tooltip);
     }
 
     // ui
@@ -205,22 +223,30 @@ export class Object {
     update() {
         if (this.sliderBool) {
             this.angle = Math.atan2(this.vy, this.vx);
-            this.tooltipList[0].updateValue(Math.sqrt(this.vx ** 2 + this.vy ** 2));
+            this.velocity = Math.sqrt(this.vx ** 2 + this.vy ** 2);
+
+            this.tooltipList[0].updateValue(this.velocity);
             this.tooltipList[1].updateValue(this.angle);
+
+            this.showVelocity();
+        }
+
+        else {
+            this.vLine.clear();
         }
     }
 
-    showAngle() {
-        this.line.clear();
+    showVelocity() {
+        this.vLine.clear();
 
         const dist = this.radius + 10;
-        const length = 50;
+        const length = (this.velocity + 1) * 6;
 
-        const startingPoint = [Math.cos(this.angle) * (dist), Math.sin(this.angle) * (dist)];
-        const endingPoint = [Math.cos(this.angle) * (dist + length), Math.sin(this.angle) * (dist + length)];
+        const startingPoint = [this.ref.x + Math.cos(this.angle) * (dist), this.ref.y + Math.sin(this.angle) * (dist)];
+        const endingPoint = [this.ref.x + Math.cos(this.angle) * (dist + length), this.ref.y + Math.sin(this.angle) * (dist + length)];
 
-        line.moveTo(startingPoint[0], startingPoint[1]);
-        line.lineTo(endingPoint[0], endingPoint[1]);
-        line.stroke({width: 3, color: 0xFF0000});
+        this.vLine.moveTo(startingPoint[0], startingPoint[1]);
+        this.vLine.lineTo(endingPoint[0], endingPoint[1]);
+        this.vLine.stroke({width: 3, color: 0xAAAAAA});
     }
 }

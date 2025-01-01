@@ -17,8 +17,13 @@ export class Slider {
         };
 
         this.value = this.options.value;
-        this.normalizedValue = (this.value - this.options.min) / (this.options.max - this.options.min);
-        this.value /= this.options.div;
+
+        this.normalizedValue = (this.value * this.options.div - this.options.min) / (this.options.max - this.options.min);
+        
+        if (this.options.log) {
+            this.normalizedValue = (Math.log10(this.value) * this.options.div - this.options.min) / (this.options.max - this.options.min);
+        }
+        console.log(this.options.description, this.normalizedValue);
 
         this.sliderContainer = new PIXI.Container();
         this.sliderContainer.x = this.options.x;
@@ -37,8 +42,6 @@ export class Slider {
         this.handle.y = this.options.height / 2;
         this.handle.interactive = true;
         this.handle.cursor = 'pointer';
-
-        
 
         this.label = new PIXI.Text(`${this.options.description} : ${this.value}`, {
             fill: 0xffffff,
