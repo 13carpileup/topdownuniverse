@@ -44,6 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        settings.sliders.forEach((slider) => {
+            if (slider.isDragging) {
+                flag = 1;
+                return;
+            }
+        })
+
         if (!mouseDown || dragTarget!=null || flag) return;
         
         local = [local[0] + (event.clientX - last[0]) / zoom, local[1] + (event.clientY - last[1]) / zoom];
@@ -143,6 +150,8 @@ let newObject = {mass: 10, radius: 10};
             }
         }
     )
+
+    buttons.push(b0);
 
     const b1 = new Button(app,
         {
