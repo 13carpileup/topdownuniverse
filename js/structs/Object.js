@@ -241,7 +241,7 @@ export class Object {
     showVelocity() {
         this.vLine.clear();
 
-        const dist = this.radius + 10;
+        const dist = this.radius * this.zoom + 10;
         const length = (this.velocity + 1) * 6;
 
         const startingPoint = [this.ref.x + Math.cos(this.angle) * (dist), this.ref.y + Math.sin(this.angle) * (dist)];
