@@ -120,9 +120,9 @@ export class Object {
     destroy() {
         this.ref.destroy();
 
-        if (this.tooltip != 'null') {
-            this.tooltip.destroy();
-        }
+        this.tooltipList.forEach((tooltip) => {
+            tooltip.destroy();
+        })
 
         this.trailLines.forEach((trail) => {
             trail.destroy();
@@ -189,7 +189,8 @@ export class Object {
                 tooltip.destroy();
             })
             
-            this.sliderBool = 0;            
+            this.sliderBool = 0; 
+            this.tooltipList = [];           
 
             return;
         }
@@ -204,5 +205,4 @@ export class Object {
             this.tooltipList[1].updateValue(Math.atan2(this.vy, this.vx));
         }
     }
-
 }
