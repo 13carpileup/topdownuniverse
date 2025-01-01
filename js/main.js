@@ -1,7 +1,6 @@
-import { Object } from './structs/Object.js'
 import { Universe } from './structs/Universe.js';
 import { Slider, Button } from './structs/UI.js';
-import { showControlsPopup, createControlsPopup, handleResize } from './util.js';
+import { showControlsPopup, handleResize } from './util.js';
 import { constants } from './constants.js';
 import { Settings } from './structs/Settings.js';
 
@@ -23,6 +22,11 @@ let zoom = 1;
 let tooltipDragging = false;
 let settings;
 let pause = 1;
+
+// windows globals
+window.gravityAmp = 1;
+window.grid = false;
+window.trails = true;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousedown', (event) => {
@@ -81,21 +85,13 @@ function handleWheel(event, app) {
     let percentage = [event.x / app.screen.width, event.y / app.screen.height];
     //percentage = [0.5, 0.5]
     console.log(percentage);
-    
-
 
     const middle = [event.x - newWidth * percentage[0], event.y - newHeight * percentage[1]];
-
     const centered = [local[0] - middle[0], local[1] - middle[1]];
-
-    // const weightingSize = 20;
-    // local[0] = (centered[0] + local[0] * (weightingSize - 1)) / (weightingSize);
-    // local[1] = (centered[1] + local[1] * (weightingSize - 1)) / (weightingSize);
     
     local = centered;
 };
 
-let gravityAmp = 1;
 let sliders = [];
 let newObject = {mass: 10, radius: 10};
 
@@ -194,10 +190,6 @@ let newObject = {mass: 10, radius: 10};
         handleResize(app, sliders, buttons);
         settings.handleResize();
     });
-
-    window.gravityAmp = 1;
-    window.grid = false;
-    window.trails = true;
 
     buttons.push(b2);
 
