@@ -63,28 +63,36 @@ function handleWheel(event, app) {
     console.log(event.x, event.y);
     const scrollDirection = Math.sign(event.deltaY);
     const zoomStep = constants.scrollSpeed; 
+    let newWidth, newHeight;
 
     if (scrollDirection < 0) {
         zoom += zoomStep;
+        newWidth = app.screen.width / (1 + zoomStep);
+        newHeight = app.screen.height / (1 + zoomStep);
     }
 
     else if (scrollDirection > 0) {
         if (zoom == 0.3) return;
         zoom = Math.max(zoom - zoomStep, 0.3); 
+        newWidth = app.screen.width / (1 - zoomStep);
+        newHeight = app.screen.height / (1 - zoomStep);
     }
 
-    const newWidth = app.screen.width / (1 + zoomStep);
-    const newHeight = app.screen.height / (1 + zoomStep);
+    let percentage = [event.x / app.screen.width, event.y / app.screen.height];
+    //percentage = [0.5, 0.5]
+    console.log(percentage);
+    
 
-    const middle = [event.x - newWidth / 2, event.y - newHeight / 2];
+
+    const middle = [event.x - newWidth * percentage[0], event.y - newHeight * percentage[1]];
 
     const centered = [local[0] - middle[0], local[1] - middle[1]];
 
-    const weightingSize = 20;
-    local[0] = (centered[0] + local[0] * (weightingSize - 1)) / (weightingSize);
-    local[1] = (centered[1] + local[1] * (weightingSize - 1)) / (weightingSize);
+    // const weightingSize = 20;
+    // local[0] = (centered[0] + local[0] * (weightingSize - 1)) / (weightingSize);
+    // local[1] = (centered[1] + local[1] * (weightingSize - 1)) / (weightingSize);
     
-    console.log(local);
+    local = centered;
 };
 
 let gravityAmp = 1;
