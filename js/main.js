@@ -76,8 +76,8 @@ function handleWheel(event, app) {
     }
 
     else if (scrollDirection > 0) {
-        if (zoom == 0.3) return;
-        zoom = Math.max(zoom - zoomStep, 0.3); 
+        if (zoom <= 0.15) return;
+        zoom = Math.max(zoom - zoomStep, 0.15); 
         newWidth = app.screen.width / (1 - zoomStep);
         newHeight = app.screen.height / (1 - zoomStep);
     }
