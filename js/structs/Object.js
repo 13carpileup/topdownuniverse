@@ -173,8 +173,9 @@ export class Object {
             value: Math.sqrt(this.vx ** 2 + this.vy ** 2),
             div:  100,
             onChange: (value) => {
-                this.angle = Math.atan2(this.vy, this.vx);
-                console.log(this.angle);
+                this.velocity = Math.sqrt(this.vy ** 2 + this.vx ** 2);
+                this.vx = Math.cos(value) * this.velocity;
+                this.vy = Math.sin(value) * this.velocity;
             },
             description: "Angle (rads)"
         });

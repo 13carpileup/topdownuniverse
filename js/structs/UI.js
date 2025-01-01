@@ -102,8 +102,6 @@ export class Slider {
     updateValue(value) {
         if (this.isDragging) return
 
-        console.log(this.options.div);
-
         this.value = Math.round(value * this.options.div) / this.options.div;
 
         this.handle.x = ((this.value - this.options.min / this.options.div) / (this.options.max - this.options.min)) * this.options.width * this.options.div;
