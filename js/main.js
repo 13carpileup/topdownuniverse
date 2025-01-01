@@ -186,6 +186,7 @@ let newObject = {mass: 10, radius: 10};
 
     window.gravityAmp = 1;
     window.grid = false;
+    window.trails = true;
 
     buttons.push(b2);
 

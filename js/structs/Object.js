@@ -80,6 +80,8 @@ export class Object {
             line.destroy();
         })
 
+        if (!window.trails) return;
+
         this.trailLines = []
 
         let n = constants.trailLength;

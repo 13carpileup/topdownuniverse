@@ -76,6 +76,17 @@ export class Settings {
             }
         }));
 
+        this.buttons.push(new Button(this.app, {
+            x: this.container.x + 20,
+            y: this.container.y + 220,
+            width: 240,
+            height: 40,
+            description: "Toggle Trails",
+            onClick: () => {
+                window.trails = !window.trails;
+            }
+        }));
+
         this.sliders.forEach((slider) => {
             slider.sliderContainer.zIndex = 2;
         })
@@ -118,7 +129,7 @@ export class Settings {
         this.buttons.forEach((button, index) => {
             button.updatePosition(
                 this.container.x + 20,
-                this.container.y + 160 + (index * 60)
+                this.container.y + 100 + (this.sliders.length * 60 + index * 60)
             );
         });
     }
