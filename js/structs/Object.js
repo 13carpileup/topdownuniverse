@@ -42,6 +42,8 @@ export class Object {
         this.sliderBool = 0;
         this.tooltip = 'null';
         this.tooltipTime = 0;
+
+        this.line = new PIXI.Graphics();
     }
 
     updateTrail(gameTime) {
@@ -202,8 +204,23 @@ export class Object {
 
     update() {
         if (this.sliderBool) {
+            this.angle = Math.atan2(this.vy, this.vx);
             this.tooltipList[0].updateValue(Math.sqrt(this.vx ** 2 + this.vy ** 2));
-            this.tooltipList[1].updateValue(Math.atan2(this.vy, this.vx));
+            this.tooltipList[1].updateValue(this.angle);
         }
+    }
+
+    showAngle() {
+        this.line.clear();
+
+        const dist = this.radius + 10;
+        const length = 50;
+
+        const startingPoint = [Math.cos(this.angle) * (dist), Math.sin(this.angle) * (dist)];
+        const endingPoint = [Math.cos(this.angle) * (dist + length), Math.sin(this.angle) * (dist + length)];
+
+        line.moveTo(startingPoint[0], startingPoint[1]);
+        line.lineTo(endingPoint[0], endingPoint[1]);
+        line.stroke({width: 3, color: 0xFF0000});
     }
 }
