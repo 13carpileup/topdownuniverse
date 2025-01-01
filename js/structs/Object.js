@@ -129,7 +129,9 @@ export class Object {
 
         this.trailLines.forEach((trail) => {
             trail.destroy();
-        })
+        });
+
+        this.vLine.destroy();
     }
 
     checkCollision(object) {
