@@ -95,7 +95,27 @@ export class Settings {
             height: 40,
             description: "Export state",
             onClick: () => {
-                navigator.clipboard.writeText("WIP");
+                let objects = [];
+                window.uni.Objects.forEach((object) => {
+                    const jsonObject = {
+                        "x": object.x,
+                        "y": object.y,
+                        "mass": object.mass,
+                        "radius": object.radius,
+                        "velocity": Math.sqrt(object.vx ** 2 + object.vy ** 2),
+                        "angle": Math.atan2(object.vy, object.vx),
+                    };
+
+                    objects.push(jsonObject);
+                });
+
+                let returnObject = {
+                    "local": window.uni.local,
+                    "zoom": window.uni.zoom,
+                    "objects": objects,
+                };
+
+                navigator.clipboard.writeText(JSON.stringify(returnObject));
                 alert("State data has been copied to your clipboard!");
             }
         }));
@@ -108,6 +128,24 @@ export class Settings {
             description: "Import state",
             onClick: () => {
                 const input = prompt("Copy your state data here", "");
+
+                try {
+                    const obj = JSON.parse(input);
+                    window.uni.clear();
+                    window.zoom = obj.zoom;
+                    window.local = obj.local;
+
+                    obj.objects.forEach((object) => {
+                        console.log(object.x, object.y, object.velocity);
+                        window.uni.addObject(object.x, object.y, object.radius, object.velocity, object.angle, object.mass);
+                    });
+                }
+                catch(err) {
+                    console.log(err);
+                    alert("Parsing error!");
+                    return;
+                }
+                console.log('imported!');
             }
         }));
 

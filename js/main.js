@@ -15,10 +15,10 @@ if (!hasVisited) {
 
 // globals
 let mouseDown = false;
-let local = [0, 0]
+window.local = [0, 0]
 let last = [0, 0]
 let dragTarget = null;
-let zoom = 1;
+window.zoom = 1;
 let tooltipDragging = false;
 let settings;
 let pause = 1;
@@ -58,39 +58,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!mouseDown || dragTarget!=null || flag) return;
         
-        local = [local[0] + (event.clientX - last[0]) / zoom, local[1] + (event.clientY - last[1]) / zoom];
+        window.local = [window.local[0] + (event.clientX - last[0]) / window.zoom, window.local[1] + (event.clientY - last[1]) / window.zoom];
         last = [event.clientX, event.clientY];
     }); 
 });
 
 
 function handleWheel(event, app) {
-    console.log(event.x, event.y);
     const scrollDirection = Math.sign(event.deltaY);
     const zoomStep = constants.scrollSpeed; 
     let newWidth, newHeight;
 
     if (scrollDirection < 0) {
-        zoom += zoomStep;
+        window.zoom += zoomStep;
         newWidth = app.screen.width / (1 + zoomStep);
         newHeight = app.screen.height / (1 + zoomStep);
     }
 
     else if (scrollDirection > 0) {
-        if (zoom <= 0.15) return;
-        zoom = Math.max(zoom - zoomStep, 0.15); 
+        if (window.zoom <= 0.15) return;
+        window.zoom = Math.max(window.zoom - zoomStep, 0.15); 
         newWidth = app.screen.width / (1 - zoomStep);
         newHeight = app.screen.height / (1 - zoomStep);
     }
 
     let percentage = [event.x / app.screen.width, event.y / app.screen.height];
-    //percentage = [0.5, 0.5]
-    console.log(percentage);
 
     const middle = [event.x - newWidth * percentage[0], event.y - newHeight * percentage[1]];
-    const centered = [local[0] - middle[0], local[1] - middle[1]];
+    const centered = [window.local[0] - middle[0], window.local[1] - middle[1]];
     
-    local = centered;
+    window.local = centered;
 };
 
 let sliders = [];
@@ -169,7 +166,7 @@ let newObject = {mass: 10, radius: 10};
             height: 50,
             description: "Create Object",
             onClick: () => {
-                window.uni.addObject(20 - local[0], 20 - local[1], newObject.radius, 0, 0, newObject.mass, true);
+                window.uni.addObject(20 - window.local[0], 20 - window.local[1], newObject.radius, 0, 0, newObject.mass, true);
             }
         }
     )
@@ -216,9 +213,9 @@ let newObject = {mass: 10, radius: 10};
     document.body.appendChild(app.canvas);
     app.ticker.add((time) =>
     {
-        let returnObject = window.uni.updateObjects(time.deltaTime * window.gravityAmp * (1 / 6) * pause, local, zoom);
+        let returnObject = window.uni.updateObjects(time.deltaTime * window.gravityAmp * (1 / 6) * pause, window.local, window.zoom);
         dragTarget = returnObject.dragTarget;
-        local = returnObject.local;
+        window.local = returnObject.local;
         tooltipDragging = returnObject.tooltipDragging;
 
     });
