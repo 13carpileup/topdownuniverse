@@ -20,15 +20,16 @@ You can export your planet's data to save it or to show off your creations. You 
 
 ```
 {
-    local: [x, y],
+    local: [float, float],
+    zoom: float,
     objects: [
         {
-            x,
-            y,
-            mass,
-            radius,
-            velocity,
-            angle
+            x: float,
+            y: float,
+            mass: int,
+            radius: int,
+            velocity: float,
+            angle: float [domain of -pi to pi],
         }, ...
     ]
 }
