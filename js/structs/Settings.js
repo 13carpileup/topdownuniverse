@@ -1,4 +1,4 @@
-import { Slider, Button } from "./UI.js";
+import { Slider, Button, TextInput } from "./UI.js";
 
 export class Settings {
     constructor(app) {
@@ -6,6 +6,7 @@ export class Settings {
         this.visible = false;
         this.sliders = [];
         this.buttons = [];
+        this.textInputs = [];
         
         this.container = new PIXI.Container();
         this.container.x = app.screen.width - 300;
@@ -46,7 +47,7 @@ export class Settings {
     drawBackground() {
         this.background.clear();
         this.background.beginFill(0x1a1a1a, 1);
-        this.background.drawRoundedRect(0, 0, 280, 250, 10);
+        this.background.drawRoundedRect(0, 0, 280, 430, 10); 
         this.background.endFill();
     }
     
@@ -87,14 +88,51 @@ export class Settings {
             }
         }));
 
+        this.buttons.push(new Button(this.app, {
+            x: this.container.x + 20,
+            y: this.container.y + 280,
+            width: 240,
+            height: 40,
+            description: "Export state",
+            onClick: () => {
+                navigator.clipboard.writeText("WIP");
+                alert("State data has been copied to your clipboard!");
+            }
+        }));
+
+        this.buttons.push(new Button(this.app, {
+            x: this.container.x + 20,
+            y: this.container.y + 340,
+            width: 240,
+            height: 40,
+            description: "Import state",
+            onClick: () => {
+                const input = prompt("Copy your state data here", "");
+            }
+        }));
+
+        this.buttons.push(new Button(this.app, {
+            x: this.container.x + 20,
+            y: this.container.y + 400,
+            width: 240,
+            height: 40,
+            description: "Clear all",
+            onClick: () => {
+                window.uni.clear();
+            }
+        }));
+
         this.sliders.forEach((slider) => {
             slider.sliderContainer.zIndex = 2;
-        })
+        });
 
         this.buttons.forEach((button) => {
             button.container.zIndex = 2;
-        })
-        
+        });
+
+        this.textInputs.forEach((textInput) => {
+            textInput.container.zIndex = 2;
+        });
         
         this.updateControlsVisibility();
     }
@@ -106,6 +144,10 @@ export class Settings {
         
         this.buttons.forEach(button => {
             button.container.visible = this.visible;
+        });
+
+        this.textInputs.forEach(textInput => {
+            textInput.container.visible = this.visible;
         });
     }
     
@@ -130,6 +172,13 @@ export class Settings {
             button.updatePosition(
                 this.container.x + 20,
                 this.container.y + 100 + (this.sliders.length * 60 + index * 60)
+            );
+        });
+
+        this.textInputs.forEach((textInput, index) => {
+            textInput.updatePosition(
+                this.container.x + 20,
+                this.container.y + 100 + (this.sliders.length * 60 + this.buttons.length * 60 + index * 60)
             );
         });
     }

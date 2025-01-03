@@ -180,6 +180,8 @@ export class Button {
         
         this.container.addChild(this.background);
         this.container.addChild(this.label);
+        this.container.cursor = 'pointer';
+
                 
         this.container.on('pointerdown', () => {
             if (this.options.descriptionToggle != null) {
@@ -200,5 +202,45 @@ export class Button {
         this.options.y = y;
         this.container.x = x;
         this.container.y = y - 25;
+    }
+}
+
+export class TextInput {
+    constructor(app, { x, y, width, placeholder, onChange }) {
+        this.container = new PIXI.Container();
+        this.container.x = x;
+        this.container.y = y;
+
+        this.background = new PIXI.Graphics();
+        this.background.beginFill(0x333333, 1);
+        this.background.drawRoundedRect(0, 0, width, 40, 5);
+        this.background.endFill();
+
+        this.text = new PIXI.Text(placeholder, {
+            fill: 0xAAAAAA,
+            fontSize: 16,
+        });
+        this.text.x = 10;
+        this.text.y = 10;
+
+        this.container.interactive = true;
+        this.container.cursor = 'text';
+
+        this.container.addChild(this.background);
+        this.container.addChild(this.text);
+
+        this.container.on('pointerdown', () => {
+            console.log('yellow');
+            const input = prompt(placeholder, "");
+            if (input !== null) {
+                onChange(input);
+            }
+        });
+        app.stage.addChild(this.container);
+    }
+
+    updatePosition(x, y) {
+        this.container.x = x;
+        this.container.y = y;
     }
 }

@@ -229,4 +229,15 @@ export class Universe {
         
         return {dragTarget: this.dragTarget, local: local, tooltipDragging: tooltipDragging};
     }
+
+    clear() {
+        this.Spacetime.clear();
+        
+        this.Objects.forEach((object) => {
+            object.destroy();
+        })
+
+        this.Objects = [];
+        
+    }
 }

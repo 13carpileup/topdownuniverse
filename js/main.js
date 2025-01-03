@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mousemove', (event) => {
         let flag = tooltipDragging;
 
+        // stops panning when using a slider
         sliders.forEach((slider) => {
             if (slider.isDragging) {
                 flag = 1;
@@ -106,12 +107,12 @@ let newObject = {mass: 10, radius: 10};
     // initialize the UNIVERSE!
 
     settings = new Settings(app);
-    let uni = new Universe(app);
+    window.uni = new Universe(app);
     app.stage.on('wheel', (() => {handleWheel(event, app)}).bind(this));
     
     // app
-    uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 4.08, 0, 1);
-    uni.addObject(app.screen.width / 2, app.screen.height / 2, 130, 0, 0, 10000);
+    window.uni.addObject(app.screen.width / 2, app.screen.height / 2 - 300, 20, 4.08, 0, 1);
+    window.uni.addObject(app.screen.width / 2, app.screen.height / 2, 130, 0, 0, 10000);
 
     sliders.push(new Slider(app, {
         x: 250,
@@ -168,7 +169,7 @@ let newObject = {mass: 10, radius: 10};
             height: 50,
             description: "Create Object",
             onClick: () => {
-                uni.addObject(20 - local[0], 20 - local[1], newObject.radius, 0, 0, newObject.mass, true);
+                window.uni.addObject(20 - local[0], 20 - local[1], newObject.radius, 0, 0, newObject.mass, true);
             }
         }
     )
@@ -215,7 +216,7 @@ let newObject = {mass: 10, radius: 10};
     document.body.appendChild(app.canvas);
     app.ticker.add((time) =>
     {
-        let returnObject = uni.updateObjects(time.deltaTime * window.gravityAmp * (1 / 6) * pause, local, zoom);
+        let returnObject = window.uni.updateObjects(time.deltaTime * window.gravityAmp * (1 / 6) * pause, local, zoom);
         dragTarget = returnObject.dragTarget;
         local = returnObject.local;
         tooltipDragging = returnObject.tooltipDragging;
