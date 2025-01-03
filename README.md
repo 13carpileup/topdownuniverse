@@ -26,7 +26,9 @@ You can export your planet's data to save it or to show off your creations. You 
             x,
             y,
             mass,
-            radius
+            radius,
+            velocity,
+            angle
         }, ...
     ]
 }
